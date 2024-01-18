@@ -1,5 +1,3 @@
-import React from "react";
-
 function Hero() {
   return (
     <section className="flex flex-col justify-center my-4 mt-8 opacity-0 animate-fadein">

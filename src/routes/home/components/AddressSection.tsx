@@ -1,5 +1,3 @@
-import React from "react";
-
 function AddressSection() {
   return (
     <section className="flex flex-col items-center max-w-2xl mx-8 gap-4 my-8 opacity-0 animate-fadein [animation-delay:800ms]">

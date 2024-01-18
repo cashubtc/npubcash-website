@@ -29,10 +29,13 @@ function ClaimRoute() {
   }
 
   async function copyHandler() {
+    if (!token) {
+      return;
+    }
     try {
       await navigator.clipboard.writeText(token);
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
   }
 
@@ -56,7 +59,7 @@ function ClaimRoute() {
       });
       const data = (await res.json()) as {
         error: boolean;
-        data?: { balance: number };
+        data: number;
       };
       if (!data.error) {
         setBalance(data.data);
