@@ -16,7 +16,7 @@ function ClaimRoute() {
     };
     const signedEvent = await window.nostr.signEvent(event);
     const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
-    const res = await fetch("http://192.168.2.101:8000/claim", {
+    const res = await fetch("https://cashu.my2sats.space/claim", {
       headers: {
         Authorization: authHeader,
       },
@@ -52,7 +52,7 @@ function ClaimRoute() {
       };
       const signedEvent = await window.nostr.signEvent(event);
       const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
-      const res = await fetch("http://192.168.2.101:8000/balance", {
+      const res = await fetch("https://cashu.my2sats.space/balance", {
         headers: {
           Authorization: authHeader,
         },
