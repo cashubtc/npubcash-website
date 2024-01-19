@@ -1,4 +1,4 @@
-import diagram from "../../../../public/diagram.svg";
+import diagram from "../../../../public/diagram.png";
 
 function Diagram() {
   return (
