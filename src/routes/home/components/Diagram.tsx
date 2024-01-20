@@ -1,8 +1,8 @@
-import diagram from "../../../../public/diagram.png";
+import diagram from "../../../assets/diagram.png";
 
 function Diagram() {
   return (
-    <section className="flex flex-col items-center gap-8 mt-8 max-w-4xl p-4 min-h-screen justify-center animate-fadein [animation-delay:800ms]">
+    <section className="flex flex-col items-center gap-8 mt-16 mb-4 max-w-4xl p-4 justify-center animate-fadein [animation-delay:800ms]">
       <div>
         <h2 className="text-center font-bold text-2xl bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text text-transparent">
           How does it work?
