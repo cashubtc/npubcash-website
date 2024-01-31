@@ -1,23 +1,7 @@
-import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Marquee from "./Marquee";
 
 const Navbar = () => {
-  const [nostr, setNostr] = useState(false);
-  useEffect(() => {
-    if (window.nostr) {
-      setNostr(true);
-    } else {
-      const int = setInterval(() => {
-        if (window.nostr) {
-          setNostr(true);
-        }
-      }, 1000);
-      setTimeout(() => {
-        clearInterval(int);
-      }, 10000);
-    }
-  }, []);
   return (
     <>
       <nav className="w-full h-20 bg-zinc-800">
@@ -33,16 +17,14 @@ const Navbar = () => {
               <li>
                 <NavLink to={{ pathname: "/" }}>Home</NavLink>
               </li>
-              {nostr ? (
-                <li>
-                  <NavLink
-                    to={{ pathname: "/claim" }}
-                    className="px-2 py-2 bg-gradient-to-tr from-purple-500 to-pink-500 rounded hover:from-purple-700 hover:to-pink-700 transition"
-                  >
-                    Claim
-                  </NavLink>
-                </li>
-              ) : undefined}
+              <li>
+                <NavLink
+                  to={{ pathname: "/claim" }}
+                  className="px-2 py-2 bg-gradient-to-tr from-purple-500 to-pink-500 rounded hover:from-purple-700 hover:to-pink-700 transition"
+                >
+                  Try it!
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>

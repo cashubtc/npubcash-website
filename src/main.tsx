@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomeRoute from "./routes/home/HomeRoute";
 import RootRoute from "./routes/RootRoute";
 import ClaimRoute from "./routes/claim/ClaimRoute";
+import UsernameRoute from "./routes/username/UsernameRoute";
 
 declare global {
   interface Window {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "claim",
         element: <ClaimRoute />,
+      },
+      {
+        path: "username",
+        element: <UsernameRoute />,
       },
     ],
   },

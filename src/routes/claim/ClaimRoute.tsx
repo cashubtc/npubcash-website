@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
+import { FaCopy } from "react-icons/fa6";
+import AlbyModal from "../../components/AlbyModal";
+import { useNostr } from "../../hooks/useNostr";
+import { Link } from "react-router-dom";
 
 function ClaimRoute() {
   const [balance, setBalance] = useState<number>();
+  const [info, setInfo] = useState<{
+    mintUrl: string;
+    npub: string;
+    username?: string;
+  }>();
   const [token, setToken] = useState<string>();
+  const nostr = useNostr();
 
   async function claimAllHandler() {
     const event = {
@@ -10,13 +20,13 @@ function ClaimRoute() {
       kind: 27235,
       created_at: Math.floor(Date.now() / 1000),
       tags: [
-        ["u", "https://cashu.my2sats.space/claim"],
+        ["u", "https://cashu-address.com/api/v1/claim"],
         ["method", "GET"],
       ],
     };
     const signedEvent = await window.nostr.signEvent(event);
     const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
-    const res = await fetch("https://cashu.my2sats.space/claim", {
+    const res = await fetch("https://cashu-address.com/api/v1/claim", {
       headers: {
         Authorization: authHeader,
       },
@@ -46,13 +56,13 @@ function ClaimRoute() {
         kind: 27235,
         created_at: Math.floor(Date.now() / 1000),
         tags: [
-          ["u", "https://cashu.my2sats.space/balance"],
+          ["u", "https://cashu-address.com/api/v1/balance"],
           ["method", "GET"],
         ],
       };
       const signedEvent = await window.nostr.signEvent(event);
       const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
-      const res = await fetch("https://cashu.my2sats.space/balance", {
+      const res = await fetch("https://cashu-address.com/api/v1/balance", {
         headers: {
           Authorization: authHeader,
         },
@@ -65,10 +75,80 @@ function ClaimRoute() {
         setBalance(data.data);
       }
     }
+    async function getInfo() {
+      const event = {
+        content: "",
+        kind: 27235,
+        created_at: Math.floor(Date.now() / 1000),
+        tags: [
+          ["u", "https://cashu-address.com/api/v1/info"],
+          ["method", "GET"],
+        ],
+      };
+      const signedEvent = await window.nostr.signEvent(event);
+      const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
+      const res = await fetch("https://cashu-address.com/api/v1/info", {
+        headers: {
+          Authorization: authHeader,
+        },
+      });
+      const data = (await res.json()) as {
+        mintUrl: string;
+        npub: string;
+        username?: string;
+      };
+      setInfo(data);
+    }
     getBalance();
+    getInfo();
   }, []);
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center mx-4">
+      {info ? (
+        <div className="p-2 bg-zinc-800 rounded w-full m-2 max-w-xl flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center">
+            <p>Your Cashu-Addresses</p>
+            <button
+              className="flex gap-1 items-center bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text text-sm active:text-purple-700"
+              onClick={() => {
+                navigator.clipboard.writeText(`${info.npub}@cashu-address.com`);
+              }}
+            >
+              {`${info.npub.slice(0, 10)}...@cashu-address.com`}
+              <FaCopy className="text-zinc-400" />
+            </button>
+            {info.username ? (
+              <p
+                className="flex gap-1 items-center bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text text-sm active:text-purple-700"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${info.username}@cashu-address.com`,
+                  );
+                }}
+              >
+                {`${info.username}@cashu-address.com`}
+                <FaCopy className="text-zinc-400" />
+              </p>
+            ) : (
+              <p className="text-sm mt-4">
+                No Username set{" "}
+                <Link
+                  className="bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text text-sm hover:text-purple-700 active:text-purple-700"
+                  to="/username"
+                >
+                  Claim one now!
+                </Link>
+              </p>
+            )}
+          </div>
+          <div className="text-center">
+            <p>Your Mint</p>
+            <p className="bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text text-sm">
+              {info.mintUrl}
+            </p>
+          </div>
+        </div>
+      ) : undefined}
       <div className="p-2 bg-zinc-800 rounded w-full m-2 max-w-xl flex flex-col items-center">
         <p>Available balance:</p>
         <p className="bg-gradient-to-tr from-purple-500 to-pink-500 inline-block p-2 rounded text-transparent font-bold text-xl bg-clip-text shadow-black">
@@ -104,6 +184,7 @@ function ClaimRoute() {
       >
         Claim All
       </button>
+      <AlbyModal isOpen={!nostr} />
     </main>
   );
 }
