@@ -3,6 +3,8 @@ import { FaCopy } from "react-icons/fa6";
 import AlbyModal from "../../components/AlbyModal";
 import { useNostr } from "../../hooks/useNostr";
 import { Link } from "react-router-dom";
+import { usePubkey } from "../../hooks/usePubkey";
+import ProfileBox from "./components/ProfileBox";
 
 function ClaimRoute() {
   const [balance, setBalance] = useState<number>();
@@ -13,6 +15,7 @@ function ClaimRoute() {
   }>();
   const [token, setToken] = useState<string>();
   const nostr = useNostr();
+  const pk = usePubkey();
 
   async function claimAllHandler() {
     const event = {
@@ -103,9 +106,10 @@ function ClaimRoute() {
     getInfo();
   }, []);
   return (
-    <main className="flex flex-col items-center mx-4">
+    <main className="flex flex-col items-center mx-4 mt-6 gap-4">
+      {pk ? <ProfileBox publicKey={pk} /> : undefined}
       {info ? (
-        <div className="p-2 bg-zinc-800 rounded w-full m-2 max-w-xl flex flex-col items-center gap-4">
+        <div className="p-2 bg-zinc-800 rounded w-full max-w-xl flex flex-col items-center gap-4">
           <div className="flex flex-col items-center">
             <p>Your Cashu-Addresses</p>
             <button

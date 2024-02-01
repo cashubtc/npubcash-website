@@ -5,6 +5,7 @@ import HomeRoute from "./routes/home/HomeRoute";
 import RootRoute from "./routes/RootRoute";
 import ClaimRoute from "./routes/claim/ClaimRoute";
 import UsernameRoute from "./routes/username/UsernameRoute";
+import { SimplePool } from "nostr-tools";
 
 declare global {
   interface Window {
@@ -27,6 +28,8 @@ declare global {
     };
   }
 }
+
+export const pool = new SimplePool();
 
 const router = createBrowserRouter([
   {
