@@ -3,7 +3,7 @@ import FeatureCard from "./FeatureCard";
 
 function FeatureCards() {
   return (
-    <section className="mx-auto flex flex-col items-center justify-center p-4 gap-4  mt-16 max-w-4xl opacity-0 animate-fadein [animation-delay:400ms]">
+    <section className="mx-auto flex flex-col items-center justify-center p-4 gap-4 mt-24 max-w-4xl opacity-0 animate-fadein [animation-delay:400ms]">
       <div>
         <h2 className="text-center font-bold text-2xl bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text text-transparent">
           A Lightning-Address powered by eCash
