@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import AlbyModal from "../../components/AlbyModal";
 import { useNostr } from "../../hooks/useNostr";
-import { usePubkey } from "../../hooks/usePubkey";
-import ProfileBox from "./components/ProfileBox";
-import { getBalance, getInfo, getToken } from "./utils";
+import { getInfo, getToken } from "./utils";
 import Button from "../../components/Button";
 import InfoBox from "./components/InfoBox";
 import Balance from "./components/Balance";
 
 function ClaimRoute() {
-  const [balance, setBalance] = useState<number>();
   const [info, setInfo] = useState<{
     mintUrl: string;
     npub: string;
@@ -17,7 +14,6 @@ function ClaimRoute() {
   }>();
   const [token, setToken] = useState<string>();
   const nostr = useNostr();
-  const pk = usePubkey();
 
   async function claimAllHandler() {
     const token = await getToken();
@@ -37,8 +33,6 @@ function ClaimRoute() {
 
   useEffect(() => {
     async function setup() {
-      const balance = await getBalance();
-      setBalance(balance);
       const info = await getInfo();
       setInfo(info);
     }
