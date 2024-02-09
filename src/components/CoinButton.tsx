@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 type CoinButtonProps = {
   icon: ReactNode;
   title: string;
