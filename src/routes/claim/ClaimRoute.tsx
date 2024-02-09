@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import AlbyModal from "../../components/AlbyModal";
 import { useNostr } from "../../hooks/useNostr";
-import { getInfo, getToken } from "./utils";
-import Button from "../../components/Button";
+import { getInfo } from "./utils";
 import InfoBox from "./components/InfoBox";
 import Balance from "./components/Balance";
+import CoinButton from "../../components/CoinButton";
+import { FaBolt, FaCoins } from "react-icons/fa6";
+import { useSearchParams } from "react-router-dom";
+import CashuClaimModal from "./components/CashuClaim";
+import LightningClaimModal from "./components/LightningClaimModal";
 
 function ClaimRoute() {
   const [info, setInfo] = useState<{
@@ -12,24 +16,9 @@ function ClaimRoute() {
     npub: string;
     username?: string;
   }>();
-  const [token, setToken] = useState<string>();
   const nostr = useNostr();
-
-  async function claimAllHandler() {
-    const token = await getToken();
-    setToken(token);
-  }
-
-  async function copyHandler() {
-    if (!token) {
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(token);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
+  const claimMode = searchParams.get("claim");
 
   useEffect(() => {
     async function setup() {
@@ -41,27 +30,29 @@ function ClaimRoute() {
     }
   }, [nostr]);
   return (
-    <main className="flex flex-col items-center mx-4 mt-6 gap-4">
+    <main className="flex flex-col items-center mx-4 mt-6 gap-8">
+      {claimMode ? <p>{claimMode}</p> : undefined}
       <Balance />
       <InfoBox info={info} />
-      {token ? (
-        <div className="w-full max-w-xl">
-          <div className="max-h-64 p-2 text-sm bg-zinc-800 break-words max-w-xl overflow-auto rounded overflow-x-hidden">
-            <p>{token}</p>
-          </div>
-          <div className="flex gap-2 w-full justify-center my-4">
-            <Button text="Copy" onClick={copyHandler} />
-            <a
-              className="bg-purple-500 px-4 py-2 rounded"
-              href={`cashu:${token}`}
-            >
-              Claim in Wallet
-            </a>
-          </div>
-        </div>
-      ) : undefined}
-      <Button text="Claim Cashu" onClick={claimAllHandler} />
+      <div className="flex gap-8">
+        <CoinButton
+          title="Claim on Lightning"
+          icon={<FaBolt style={{ fill: "white" }} />}
+          onClick={() => {
+            setSearchParams("claim=ln");
+          }}
+        />
+        <CoinButton
+          title="Claim on Cashu"
+          icon={<FaCoins />}
+          onClick={() => {
+            setSearchParams("claim=cashu");
+          }}
+        />
+      </div>
       <AlbyModal isOpen={!nostr} />
+      {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
+      {claimMode === "ln" ? <LightningClaimModal /> : undefined}
     </main>
   );
 }

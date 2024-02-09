@@ -74,6 +74,7 @@ export async function getToken() {
   }
   return data.data.token;
 }
+
 export async function getInfo() {
   const event = {
     content: "",
