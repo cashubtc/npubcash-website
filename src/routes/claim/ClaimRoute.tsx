@@ -31,10 +31,9 @@ function ClaimRoute() {
   }, [nostr]);
   return (
     <main className="flex flex-col items-center mx-4 mt-6 gap-8">
-      {claimMode ? <p>{claimMode}</p> : undefined}
       <Balance />
       <InfoBox info={info} />
-      <div className="flex gap-8">
+      <div className="flex gap-8 border-t-2 border-zinc-800 pt-8">
         <CoinButton
           title="Claim on Lightning"
           icon={<FaBolt style={{ fill: "white" }} />}
@@ -44,7 +43,7 @@ function ClaimRoute() {
         />
         <CoinButton
           title="Claim on Cashu"
-          icon={<FaCoins />}
+          icon={<FaCoins style={{ fill: "white" }} />}
           onClick={() => {
             setSearchParams("claim=cashu");
           }}

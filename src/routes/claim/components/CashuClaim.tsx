@@ -45,8 +45,10 @@ function CashuClaim() {
   if (loading) {
     return (
       <ModalWrapper>
-        <p className="text-white">Loading Token...</p>;
-        <Button text="Close" onClick={() => setParams(undefined)} />
+        <div className="flex flex-col gap-2 items-center">
+          <p className="text-white">Loading Token...</p>
+          <Button text="Close" onClick={() => setParams(undefined)} />
+        </div>
       </ModalWrapper>
     );
   }
@@ -54,8 +56,10 @@ function CashuClaim() {
   if (error) {
     return (
       <ModalWrapper>
-        <p className="text-white">{error}</p>
-        <Button text="Close" onClick={() => setParams(undefined)} />
+        <div className="flex flex-col gap-2 items-center">
+          <p className="text-white">{error}</p>
+          <Button text="Close" onClick={() => setParams(undefined)} />
+        </div>
       </ModalWrapper>
     );
   }

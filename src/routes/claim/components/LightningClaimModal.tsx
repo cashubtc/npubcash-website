@@ -65,8 +65,10 @@ function LightningClaim() {
   if (loading) {
     return (
       <ModalWrapper>
-        <p className="text-white">Loading Token...</p>;
-        <Button text="Close" onClick={() => setParams(undefined)} />
+        <div className="flex flex-col gap-2 items-center">
+          <p className="text-white">Loading Token...</p>
+          <Button text="Close" onClick={() => setParams(undefined)} />
+        </div>
       </ModalWrapper>
     );
   }
@@ -74,8 +76,10 @@ function LightningClaim() {
   if (error) {
     return (
       <ModalWrapper>
-        <p className="text-white">{error}</p>
-        <Button text="Close" onClick={() => setParams(undefined)} />
+        <div className="flex flex-col gap-2 items-center">
+          <p className="text-white">{error}</p>
+          <Button text="Close" onClick={() => setParams(undefined)} />
+        </div>
       </ModalWrapper>
     );
   }
@@ -87,15 +91,16 @@ function LightningClaim() {
         <div className="absolute inset-0 flex justify-center items-center">
           <dialog
             open
-            className="flex flex-col justify-center items-center gap-4 p-4 rounded bg-zinc-800"
+            className="flex flex-col justify-center items-center gap-4 max-w-xs sm:max-w-sm p-4 rounded bg-zinc-800"
           >
-            <div className="flex flex-col items-center text-white ">
+            <div className="flex flex-col items-center text-white text-center">
               <p>
                 Please paste an Lightning Invoice for{" "}
                 {tokenAmount - lightningFees} SATS
               </p>
               <p className="text-xs text-zinc-500">
-                {lightningFees} SATS are reserved for Lightning Fees
+                {lightningFees} SATS are reserved for Lightning Fees. Change can
+                be claimed using a cashu wallet.
               </p>
             </div>
             <div className="flex flex-col items-center">
