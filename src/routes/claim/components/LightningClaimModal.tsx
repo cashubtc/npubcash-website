@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getToken } from "../utils";
+import { getInvoiceAmount, getToken } from "../utils";
 import { createPortal } from "react-dom";
 import Button from "../../../components/Button";
 import ModalWrapper from "../../../components/ModalWrapper";
@@ -48,6 +48,14 @@ function LightningClaim() {
     try {
       if (!inputRef.current || !inputRef.current.value || !decodedToken) {
         throw new Error("Please paste a valid Lightning invoice");
+      }
+      const invoiceAmount = getInvoiceAmount(inputRef.current.value);
+      if (invoiceAmount !== tokenAmount! - lightningFees) {
+        throw new Error(
+          `Invalid amount! Please make sure that the amount is exactly ${
+            tokenAmount! - lightningFees
+          } SATS`,
+        );
       }
       const wallet = new CashuWallet(new CashuMint(decodedToken.token[0].mint));
       const proofs = decodedToken.token.map((entry) => entry.proofs).flat();

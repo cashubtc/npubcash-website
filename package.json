@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@cashu/cashu-ts": "^0.8.2-rc.7",
+    "light-bolt11-decoder": "^3.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.2",
     "nostr-tools": "^2.1.5",

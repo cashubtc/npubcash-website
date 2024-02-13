@@ -1,3 +1,5 @@
+//@ts-ignore
+import { decode as decodeInvoice } from "light-bolt11-decoder";
 export async function createAuthHeader(url: string, method: string) {
   const event = {
     content: "",
@@ -24,6 +26,15 @@ export async function authedJsonRequest(
       "Content-Type": "application/json",
     },
   });
+}
+
+export function getInvoiceAmount(invoice: string) {
+  const { sections } = decodeInvoice(invoice);
+  for (let i = 0; i < sections.length; i++) {
+    if (sections[i].name === "amount") {
+      return sections[i].value / 1000;
+    }
+  }
 }
 
 export async function requestUsernameInvoice(
