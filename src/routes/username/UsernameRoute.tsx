@@ -35,7 +35,7 @@ function UsernameRoute() {
             "PUT",
           );
         }
-        if (count > 30) {
+        if (count > 100) {
           return clearInterval(intervalRef.current);
         }
         const payRes = await authedJsonRequest(
