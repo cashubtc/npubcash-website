@@ -7,6 +7,25 @@ function Diagram() {
         </h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="flex flex-col gap-4 md:col-span-3 p-4 bg-zinc-800 rounded">
+          <p>
+            npub.cash is based on Cashu-Address a protocol built on top of Cashu
+            Bitcoin, the Lightning Network and nostr. It enabled a web server to
+            receive Lightning payments for a user and to then mint eCash in
+            cooperation with the user's chosen custodian.
+          </p>
+          <p>
+            A more detailed documentation as well as a guide to get started can
+            be found on our{" "}
+            <a
+              className="bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text"
+              href="https://docs.cashu-address.com/"
+            >
+              Documentation Page
+            </a>
+            .
+          </p>
+        </div>
         <div className=" max-w-4xl p-4 rounded bg-zinc-800 md:col-span-2 flex items-center">
           <div className="flex w-full h-full relative rounded">
             <iframe
@@ -56,19 +75,6 @@ function Diagram() {
               them with his Cashu Wallet
             </p>
           </div>
-        </div>
-        <div className="flex flex-col items-center gap-4 md:col-span-3 p-4 bg-zinc-800 rounded">
-          <p>
-            A more detailed documentation as well as a guide to get started can
-            be found on our{" "}
-            <a
-              className="bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text"
-              href="https://docs.cashu-address.com/"
-            >
-              Documentation Page
-            </a>
-            .
-          </p>
         </div>
       </div>
     </section>

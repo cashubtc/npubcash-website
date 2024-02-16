@@ -67,12 +67,12 @@ function UsernameRoute() {
     <main className="flex flex-col justify-center items-center mt-16 gap-8 mx-4">
       <div className="flex flex-col gap-2 max-w-3xl">
         <h2 className="text-center font-bold text-4xl md:text-5xl bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Cashu-Address Username
+          npub.cash Username
         </h2>
         <p className="text-center">
-          Cashu-Address works with your nostr public key out of the box. But you
-          can claim an additional, human-readable username and receive payments
-          on both your public key and username.
+          npub.cash works with your nostr public key out of the box. But you can
+          claim an additional, human-readable username and receive payments on
+          both your public key and username.
         </p>
       </div>
       <div className="flex flex-col items-center gap-8">

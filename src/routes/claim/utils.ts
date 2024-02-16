@@ -117,13 +117,13 @@ export async function getBalance() {
     kind: 27235,
     created_at: Math.floor(Date.now() / 1000),
     tags: [
-      ["u", "https://cashu-address.com/api/v1/balance"],
+      ["u", "https://npub.cash/api/v1/balance"],
       ["method", "GET"],
     ],
   };
   const signedEvent = await window.nostr.signEvent(event);
   const authHeader = `Nostr ${btoa(JSON.stringify(signedEvent))}`;
-  const res = await fetch("https://cashu-address.com/api/v1/balance", {
+  const res = await fetch("https://npub.cash/api/v1/balance", {
     headers: {
       Authorization: authHeader,
     },

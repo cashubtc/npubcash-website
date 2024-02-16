@@ -16,7 +16,7 @@ function UsernameInput({ username, setUsername }: UsernameInputProps) {
         id="username"
       />
       <p className="min-w-0 flex-shrink-0 ml-2 text-center text-xs">
-        @Cashu-Address.com
+        @npub.cash
       </p>
     </div>
   );

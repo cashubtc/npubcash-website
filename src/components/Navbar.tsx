@@ -8,10 +8,17 @@ const Navbar = () => {
         <div className="container mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full">
             <NavLink
-              className="text-white font-black text-xl md:text-2xl"
+              className="flex items-center gap-2 text-white font-black text-xl md:text-2xl"
               to="/"
             >
-              <p>Cashu Address</p>
+              <img src={"/logo.png"} className="h-6" />
+              <p>
+                <span className="bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text">
+                  n
+                </span>
+                pub
+                <span className="text-sm">.cash</span>
+              </p>
             </NavLink>
             <ul className="flex gap-x-4 text-white items-center">
               <li>

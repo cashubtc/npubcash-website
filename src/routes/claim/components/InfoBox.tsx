@@ -28,10 +28,10 @@ function InfoBox({ info }: InfoBoxProps) {
           <p
             className="flex gap-1 items-center text-xs bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text active:text-purple-700"
             onClick={() => {
-              navigator.clipboard.writeText(`${info.npub}@cashu-address.com`);
+              navigator.clipboard.writeText(`${info.npub}@npub.cash`);
             }}
           >
-            {`${info.npub.slice(0, 10)}...@cashu-address.com`}
+            {`${info.npub.slice(0, 10)}...@npub.cash`}
             <FaCopy className="text-purple-500" />
           </p>
         </div>
