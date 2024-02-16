@@ -9,10 +9,10 @@ function Diagram() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="flex flex-col gap-4 md:col-span-3 p-4 bg-zinc-800 rounded">
           <p>
-            npub.cash is based on Cashu-Address a protocol built on top of Cashu
-            Bitcoin, the Lightning Network and nostr. It enabled a web server to
-            receive Lightning payments for a user and to then mint eCash in
-            cooperation with the user's chosen custodian.
+            npub.cash uses Cashu-Address, a protocol built on Cashu and nostr.
+            Cashu-Address allows a web server to provide Lightning addresses and
+            mint ecash form the user's preferred Cashu mint. The user then
+            redeems the ecash when they come back online.
           </p>
           <p>
             A more detailed documentation as well as a guide to get started can
