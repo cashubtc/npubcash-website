@@ -29,7 +29,7 @@ function Diagram() {
               Lightning Payment
             </p>
             <p className="text-sm text-zinc-400">
-              Alices sends a Lightnin Payment to Bob's Cashu-Address
+              Alices sends a Lightning Payment to Bob's Cashu-Address
             </p>
           </div>
           <div>
