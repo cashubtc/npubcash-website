@@ -1,6 +1,5 @@
-import { FaCopy } from "react-icons/fa6";
-import UsernameButton from "./UsernameButton";
 import AddressButton from "./AddressButton";
+import UsernameButton from "./UsernameButton";
 
 type InfoBoxProps = {
   info?: {
@@ -24,7 +23,12 @@ function InfoBox({ info }: InfoBoxProps) {
   }
   return (
     <div className="flex w-full flex-col items-center gap-2">
-      <AddressButton address={`${info.npub.slice(0, 10)}...@npub.cash`} />
+      <AddressButton
+        address={`${info.npub.slice(0, 10)}...@npub.cash`}
+        onClick={() => {
+          window.navigator.clipboard.writeText(`${info.npub}@npub.cash`);
+        }}
+      />
       <UsernameButton username={info.username} />
     </div>
   );
