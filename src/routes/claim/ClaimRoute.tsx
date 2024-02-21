@@ -15,34 +15,29 @@ function ClaimRoute() {
   const logout = useLogout();
 
   return (
-    <main className="flex flex-col items-center mx-4 mt-6 gap-8">
-      <Balance />
-      <InfoBox info={info} />
-      <div className="flex gap-8 border-t-2 border-zinc-800 pt-8">
-        <CoinButton
-          title="Claim on Lightning"
-          icon={<FaBolt style={{ fill: "white" }} />}
-          onClick={() => {
-            setSearchParams("claim=ln");
-          }}
-        />
-        <CoinButton
-          title="Claim on Cashu"
-          icon={<FaCoins style={{ fill: "white" }} />}
-          onClick={() => {
-            setSearchParams("claim=cashu");
-          }}
-        />
-        <CoinButton
-          title="Logout"
-          icon={<FaDoorOpen style={{ fill: "white" }} />}
-          onClick={() => {
-            logout();
-          }}
-        />
+    <main className="p-0.5 shadow-lg bg-gradient-to-tr from-purple-500 to-pink-500 rounded-xl items-center mt-6">
+      <div className="bg-zinc-800 p-8 flex flex-col gap-8 rounded-xl">
+        <Balance />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <CoinButton
+            title="Claim on Lightning"
+            icon={<FaBolt style={{ fill: "white" }} />}
+            onClick={() => {
+              setSearchParams("claim=ln");
+            }}
+          />
+          <CoinButton
+            title="Claim on Cashu"
+            icon={<FaCoins style={{ fill: "white" }} />}
+            onClick={() => {
+              setSearchParams("claim=cashu");
+            }}
+          />
+        </div>
+        <InfoBox info={info} />
+        {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
+        {claimMode === "ln" ? <LightningClaimModal /> : undefined}
       </div>
-      {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
-      {claimMode === "ln" ? <LightningClaimModal /> : undefined}
     </main>
   );
 }

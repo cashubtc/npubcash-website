@@ -30,7 +30,7 @@ function RootRoute() {
         </linearGradient>
       </svg>
       <Navbar />
-      <div className="min-h-svh">
+      <div className="flex justify-center items-start min-h-svh">
         <Outlet />
       </div>
       <Footer />

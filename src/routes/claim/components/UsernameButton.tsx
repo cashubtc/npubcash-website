@@ -1,5 +1,5 @@
-import { FaCopy } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import AddressButton from "./AddressButton";
 
 type UsernameButtonProps = {
   username?: string;
@@ -13,10 +13,10 @@ function UsernameButton({ username }: UsernameButtonProps) {
         onClick={() => {
           navigate("/username");
         }}
-        className="p-0.5 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full"
+        className="w-full p-0.5 bg-gradient-to-tr from-purple-500 to-pink-500 rounded"
       >
-        <div className="bg-zinc-900 px-2 py-1 rounded-full">
-          <p className="flex gap-1 items-center text-xs bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text hover:text-purple-700 active:text-purple-700">
+        <div className="bg-zinc-800 px-2 py-1 rounded">
+          <p className="flex gap-1 items-center text-sm bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text hover:text-purple-700 active:text-purple-700">
             No username... Claim one!
           </p>
         </div>
@@ -24,19 +24,12 @@ function UsernameButton({ username }: UsernameButtonProps) {
     );
   }
   return (
-    <button
+    <AddressButton
+      address={`${username}@npub.cash`}
       onClick={() => {
-        navigator.clipboard.writeText(`${username}@npub.cash`);
+        window.navigator.clipboard.writeText(`${username}@npub.cash`);
       }}
-      className="p-0.5 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full"
-    >
-      <div className="bg-zinc-900 px-2 py-1 rounded-full">
-        <p className="flex gap-1 items-center text-xs bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text hover:text-purple-700 active:text-purple-700">
-          {`${username}@npub.cash`}
-          <FaCopy className="text-purple-500" />
-        </p>
-      </div>
-    </button>
+    />
   );
 }
 
