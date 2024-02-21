@@ -37,6 +37,13 @@ function ClaimRoute() {
         <InfoBox info={info} />
         {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
         {claimMode === "ln" ? <LightningClaimModal /> : undefined}
+        <CoinButton
+          title="Logout"
+          icon={<FaDoorOpen style={{ fill: "white" }} />}
+          onClick={() => {
+            logout();
+          }}
+        />
       </div>
     </main>
   );
