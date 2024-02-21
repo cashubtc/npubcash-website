@@ -6,6 +6,8 @@ import RootRoute from "./routes/RootRoute";
 import ClaimRoute from "./routes/claim/ClaimRoute";
 import UsernameRoute from "./routes/username/UsernameRoute";
 import { SimplePool } from "nostr-tools";
+import { SdkProvider } from "./hooks/providers/SdkProvider";
+import SetupRoute from "./routes/setup/SetupRoute";
 
 declare global {
   interface Window {
@@ -48,10 +50,13 @@ const router = createBrowserRouter([
         path: "username",
         element: <UsernameRoute />,
       },
+      { path: "setup", element: <SetupRoute /> },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />,
+  <SdkProvider>
+    <RouterProvider router={router} />
+  </SdkProvider>,
 );
