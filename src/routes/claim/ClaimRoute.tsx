@@ -1,34 +1,19 @@
-import { useEffect, useState } from "react";
-import AlbyModal from "../../components/AlbyModal";
-import { useNostr } from "../../hooks/useNostr";
-import { getInfo } from "./utils";
 import InfoBox from "./components/InfoBox";
 import Balance from "./components/Balance";
 import CoinButton from "../../components/CoinButton";
-import { FaBolt, FaCoins } from "react-icons/fa6";
+import { FaBolt, FaCoins, FaDoorOpen } from "react-icons/fa6";
 import { useSearchParams } from "react-router-dom";
 import CashuClaimModal from "./components/CashuClaim";
 import LightningClaimModal from "./components/LightningClaimModal";
+import useInfo from "./hooks/useInfo";
+import useLogout from "../../hooks/useLogout";
 
 function ClaimRoute() {
-  const [info, setInfo] = useState<{
-    mintUrl: string;
-    npub: string;
-    username?: string;
-  }>();
-  const nostr = useNostr();
   const [searchParams, setSearchParams] = useSearchParams();
   const claimMode = searchParams.get("claim");
+  const info = useInfo();
+  const logout = useLogout();
 
-  useEffect(() => {
-    async function setup() {
-      const info = await getInfo();
-      setInfo(info);
-    }
-    if (nostr) {
-      setup();
-    }
-  }, [nostr]);
   return (
     <main className="flex flex-col items-center mx-4 mt-6 gap-8">
       <Balance />
@@ -48,8 +33,14 @@ function ClaimRoute() {
             setSearchParams("claim=cashu");
           }}
         />
+        <CoinButton
+          title="Logout"
+          icon={<FaDoorOpen style={{ fill: "white" }} />}
+          onClick={() => {
+            logout();
+          }}
+        />
       </div>
-      <AlbyModal isOpen={!nostr} />
       {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
       {claimMode === "ln" ? <LightningClaimModal /> : undefined}
     </main>

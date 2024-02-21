@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
 import Marquee from "./Marquee";
+import { useContext } from "react";
+import { SdkContext } from "../hooks/providers/SdkProvider";
 
 const Navbar = () => {
+  const { sdk } = useContext(SdkContext);
   return (
     <>
       <nav className="w-full h-20 bg-zinc-800">
@@ -26,7 +29,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink
-                  to={{ pathname: "/claim" }}
+                  to={{ pathname: sdk ? "/claim" : "setup" }}
                   className="px-2 py-2 bg-gradient-to-tr from-purple-500 to-pink-500 rounded hover:from-purple-700 hover:to-pink-700 transition"
                 >
                   Wallet

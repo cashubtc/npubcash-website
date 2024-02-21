@@ -1,31 +1,19 @@
-import { useEffect, useState } from "react";
-import { getToken } from "../utils";
+import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "../../../components/Button";
 import ModalWrapper from "../../../components/ModalWrapper";
 import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
+import { SdkContext } from "../../../hooks/providers/SdkProvider";
 
 function CashuClaim() {
-  const [token, setToken] = useState();
+  const [token, setToken] = useState<string>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
+  const { sdk } = useContext(SdkContext);
 
   useStopScroll();
-
-  async function claimAllHandler() {
-    try {
-      const token = await getToken();
-      setToken(token);
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function copyHandler() {
     if (!token) {
@@ -39,8 +27,14 @@ function CashuClaim() {
   }
 
   useEffect(() => {
-    claimAllHandler();
-  }, []);
+    if (sdk) {
+      sdk
+        .getToken()
+        .then((data) => setToken(data))
+        .catch((err) => setError(err))
+        .finally(() => setLoading(false));
+    }
+  }, [sdk]);
 
   if (loading) {
     return (

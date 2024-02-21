@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { getInvoiceAmount, getToken } from "../utils";
+import { useContext, useEffect, useRef, useState } from "react";
+import { getInvoiceAmount } from "../utils";
 import { createPortal } from "react-dom";
 import Button from "../../../components/Button";
 import ModalWrapper from "../../../components/ModalWrapper";
@@ -9,6 +9,7 @@ import useDecodedToken from "../../../hooks/useDecodedToken";
 import useTokenAmount from "../../../hooks/useTokenAmount";
 import { CashuMint, CashuWallet, Proof } from "@cashu/cashu-ts";
 import LightningChange from "./LightningChange";
+import { SdkContext } from "../../../hooks/providers/SdkProvider";
 
 function LightningClaim() {
   const [token, setToken] = useState<string>();
@@ -18,6 +19,7 @@ function LightningClaim() {
   const [change, setChange] = useState<{ proofs: Proof[]; mint: string }>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
+  const { sdk } = useContext(SdkContext);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,21 +29,15 @@ function LightningClaim() {
   const { tokenAmount, lightningFees } = useTokenAmount(decodedToken);
 
   useEffect(() => {
-    claimAllHandler();
-  }, []);
-
-  async function claimAllHandler() {
-    try {
-      const token = await getToken();
-      setToken(token);
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e.message);
-      }
-    } finally {
-      setLoading(false);
+    if (sdk) {
+      sdk
+        .getToken()
+        .then((data) => setToken(data))
+        .catch((err) => setError(err))
+        .finally(() => setLoading(false));
     }
-  }
+  }, [sdk]);
+
   async function payInvoice() {
     setLnError("");
     setLnLoading(true);
