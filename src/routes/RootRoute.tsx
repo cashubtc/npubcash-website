@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
-import { sdk, setupSdk } from "../sdk";
+import { setupSdk } from "../sdk";
 import { SdkContext } from "../hooks/providers/SdkProvider";
 
 function RootRoute() {

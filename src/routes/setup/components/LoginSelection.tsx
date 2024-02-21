@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
 import { useNavigate } from "react-router-dom";
 import { NCSDK, Nip07Signer } from "cashu-address-sdk";
-import { FaKey, FaShield, FaSignature } from "react-icons/fa6";
+import { FaShield, FaSignature } from "react-icons/fa6";
 import AlbyModal from "../../../components/AlbyModal";
 
 function LoginSelection({
