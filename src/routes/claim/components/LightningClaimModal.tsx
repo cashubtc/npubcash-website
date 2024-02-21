@@ -33,7 +33,7 @@ function LightningClaim() {
       sdk
         .getToken()
         .then((data) => setToken(data))
-        .catch((err) => setError(err))
+        .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
     }
   }, [sdk]);
