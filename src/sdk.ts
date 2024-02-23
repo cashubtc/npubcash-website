@@ -6,7 +6,6 @@ export async function setupSdk() {
     | "nip07"
     | "nip46"
     | undefined;
-  console.log(method);
   if (method === "nip07") {
     return new NCSDK("https://npub.cash", new Nip07Signer());
   }
