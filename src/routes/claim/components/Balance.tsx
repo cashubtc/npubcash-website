@@ -21,7 +21,7 @@ function Balance() {
     );
   }
   return (
-    <div className="rounded w-full max-w-xl flex flex-col items-center">
+    <div className="rounded w-full mt-8 max-w-xl flex flex-col items-center">
       <p className="bg-gradient-to-tr from-purple-500 to-pink-500 inline-block p-2 rounded text-transparent font-bold text-3xl bg-clip-text shadow-black">
         {`${balance ? balance : 0} ${balance && balance > 1 ? "SATS" : "SAT"}`}
       </p>

@@ -3,6 +3,7 @@ import { NCSDK, Nip46Signer } from "cashu-address-sdk";
 import React, { useContext, useRef, useState } from "react";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function ConnectSigner({
   setMethod,
@@ -52,7 +53,12 @@ function ConnectSigner({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 p-4 bg-zinc-800 rounded">
+    <motion.div
+      initial={{ opacity: 0, translateX: -100 }}
+      animate={{ opacity: 1, translateX: 0 }}
+      exit={{ opacity: 0, translateX: 100 }}
+      className="flex flex-col justify-center items-center gap-4 p-4 bg-zinc-800 rounded"
+    >
       <h1>Enter your connection string</h1>
       <div className="flex w-full flex-col justify-center gap-2">
         <input ref={inputRef} className="p-1 bg-zinc-900 rounded" />
@@ -79,7 +85,7 @@ function ConnectSigner({
           Back
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

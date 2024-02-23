@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { NCSDK, Nip07Signer } from "cashu-address-sdk";
 import { FaShield, FaSignature } from "react-icons/fa6";
 import AlbyModal from "../../../components/AlbyModal";
+import { motion } from "framer-motion";
 
 function LoginSelection({
   setMethod,
@@ -15,7 +16,12 @@ function LoginSelection({
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 p-4 bg-zinc-800 rounded shadow-lg">
+    <motion.div
+      initial={{ opacity: 0, translateX: -100 }}
+      animate={{ opacity: 1, translateX: 0 }}
+      exit={{ opacity: 0, translateX: 100 }}
+      className="flex flex-col justify-center items-center gap-4 p-4 bg-zinc-800 rounded shadow-lg"
+    >
       <h1>Choose a Login Method</h1>
       <div className="flex w-full flex-col justify-center gap-2">
         <button
@@ -45,7 +51,7 @@ function LoginSelection({
         </button>
       </div>
       <AlbyModal isOpen={modal} />
-    </div>
+    </motion.div>
   );
 }
 

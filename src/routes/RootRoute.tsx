@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
 import { setupSdk } from "../sdk";
 import { SdkContext } from "../hooks/providers/SdkProvider";
+import { AnimatePresence } from "framer-motion";
 
 function RootRoute() {
   const [ready, setReady] = useState(false);
@@ -12,7 +13,6 @@ function RootRoute() {
   useEffect(() => {
     async function setup() {
       const newSdk = await setupSdk();
-      console.log(newSdk);
       setSdk(newSdk);
       setReady(true);
     }
@@ -31,7 +31,9 @@ function RootRoute() {
       </svg>
       <Navbar />
       <div className="flex justify-center items-start min-h-svh">
-        <Outlet />
+        <AnimatePresence>
+          <Outlet />
+        </AnimatePresence>
       </div>
       <Footer />
     </>
