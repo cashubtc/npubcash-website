@@ -1,61 +1,62 @@
-import { useRef, useState } from "react";
-import AlbyModal from "../../components/AlbyModal";
-import { useNostr } from "../../hooks/useNostr";
-import {
-  authedJsonRequest,
-  createAuthHeader,
-  requestUsernameInvoice,
-} from "../claim/utils";
+import { useContext, useEffect, useRef, useState } from "react";
 import PaymentModal from "./components/PaymentModal";
 import UsernameInput from "./components/UsernameInput";
+import { SdkContext } from "../../hooks/providers/SdkProvider";
+import { useNavigate } from "react-router-dom";
 
 function UsernameRoute() {
-  const nostr = useNostr();
   const [username, setUsername] = useState("");
   const [invoice, setInvoice] = useState<string>();
   const [paid, setPaid] = useState(false);
   const [error, setError] = useState<string>("");
+  const { sdk } = useContext(SdkContext);
+  const navigate = useNavigate();
 
   const intervalRef = useRef<NodeJS.Timeout>();
 
+  useEffect(() => {
+    if (!sdk) {
+      navigate("/setup");
+    }
+  }, [sdk]);
+
   async function clickHandler() {
-    let authHeader: string;
-    authHeader = await createAuthHeader(
-      "https://cashu-address.com/api/v1/info/username",
-      "PUT",
-    );
+    if (!sdk || !username) {
+      return;
+    }
+    const storedPayment = localStorage.getItem(`purchase:${username}`);
     try {
-      const res = await requestUsernameInvoice(username, authHeader);
-      setInvoice(res.data.paymentRequest);
-      let count = 1;
-      intervalRef.current = setInterval(async () => {
-        if (count % 5 === 0) {
-          authHeader = await createAuthHeader(
-            "https://cashu-address.com/api/v1/info/username",
-            "PUT",
-          );
+      if (!storedPayment) {
+        const res = await sdk.setUsername(username, undefined);
+        if (!res.data?.paymentRequest && res.error) {
+          throw new Error(res.message);
         }
-        if (count > 100) {
-          return clearInterval(intervalRef.current);
-        }
-        const payRes = await authedJsonRequest(
-          "https://cashu-address.com/api/v1/info/username",
-          authHeader,
-          {
-            body: JSON.stringify({
-              username,
-              paymentToken: res.data.paymentToken,
-            }),
-            method: "PUT",
-          },
+        localStorage.setItem(
+          `purchase:${username}`,
+          JSON.stringify({
+            paymentToken: res.data.paymentToken,
+            paymentRequest: res.data.paymentRequest,
+          }),
         );
-        const payData = await payRes.json();
-        if (!payData.error) {
-          setPaid(true);
-          clearInterval(intervalRef.current);
-        }
-        count++;
-      }, 6000);
+        setInvoice(res.data.paymentRequest);
+        intervalRef.current = setInterval(async () => {
+          const payRes = await sdk.setUsername(username, res.data.paymentToken);
+          if (!payRes.error) {
+            setPaid(true);
+            clearInterval(intervalRef.current);
+          }
+        }, 6000);
+      } else {
+        const { paymentToken, paymentRequest } = JSON.parse(storedPayment);
+        setInvoice(paymentRequest);
+        intervalRef.current = setInterval(async () => {
+          const payRes = await sdk.setUsername(username, paymentToken);
+          if (!payRes.error) {
+            setPaid(true);
+            clearInterval(intervalRef.current);
+          }
+        }, 6000);
+      }
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);
@@ -67,12 +68,12 @@ function UsernameRoute() {
     <main className="flex flex-col justify-center items-center mt-16 gap-8 mx-4">
       <div className="flex flex-col gap-2 max-w-3xl">
         <h2 className="text-center font-bold text-4xl md:text-5xl bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text text-transparent">
-          Cashu-Address Username
+          npub.cash Username
         </h2>
         <p className="text-center">
-          Cashu-Address works with your nostr public key out of the box. But you
-          can claim an additional, human-readable username and receive payments
-          on both your public key and username.
+          npub.cash works with your nostr public key out of the box. But you can
+          claim an additional, human-readable username and receive payments on
+          both your public key and username.
         </p>
       </div>
       <div className="flex flex-col items-center gap-8">
@@ -87,6 +88,10 @@ function UsernameRoute() {
         >
           Claim Username (5000 SATS)
         </button>
+        <p className="text-xs text-zinc-400">
+          Purchases are cached in your browser. If something goes wrong during
+          payment simply try to claim the same username again
+        </p>
       </div>
       <PaymentModal
         invoice={invoice}
@@ -98,7 +103,6 @@ function UsernameRoute() {
         }}
         paid={paid}
       />
-      <AlbyModal isOpen={!nostr} />
     </main>
   );
 }

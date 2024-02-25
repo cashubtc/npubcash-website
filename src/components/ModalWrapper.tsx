@@ -1,16 +1,20 @@
 import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
 function ModalWrapper({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="inset-0 bg-black opacity-80 absolute" />
       <div className="absolute inset-0 flex justify-center items-center">
-        <dialog
+        <motion.dialog
           open
-          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800"
+          className="flex flex-col justify-center items-center p-8 rounded bg-zinc-800"
+          initial={{ opacity: 0, translateY: -50 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          exit={{ opacity: 0, translateY: 50 }}
         >
           {children}
-        </dialog>
+        </motion.dialog>
       </div>
     </>
   );

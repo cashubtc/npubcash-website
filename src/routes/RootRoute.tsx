@@ -1,8 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useContext, useEffect, useState } from "react";
+import { setupSdk } from "../sdk";
+import { SdkContext } from "../hooks/providers/SdkProvider";
+import { AnimatePresence } from "framer-motion";
 
 function RootRoute() {
+  const [ready, setReady] = useState(false);
+  const { setSdk } = useContext(SdkContext);
+
+  useEffect(() => {
+    async function setup() {
+      const newSdk = await setupSdk();
+      setSdk(newSdk);
+      setReady(true);
+    }
+    setup();
+  }, [setSdk]);
+  if (!ready) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
       <svg width="0" height="0">
@@ -12,8 +30,10 @@ function RootRoute() {
         </linearGradient>
       </svg>
       <Navbar />
-      <div className="min-h-svh">
-        <Outlet />
+      <div className="flex justify-center items-start min-h-svh">
+        <AnimatePresence>
+          <Outlet />
+        </AnimatePresence>
       </div>
       <Footer />
     </>

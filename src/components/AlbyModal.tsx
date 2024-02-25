@@ -8,7 +8,7 @@ function ModalContent() {
       <div className="absolute inset-0 flex justify-center items-center">
         <dialog
           open
-          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800"
+          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800 text-white"
         >
           <p className="text-center p-16">
             Looks like you do not have a{" "}

@@ -6,11 +6,12 @@ function FeatureCards() {
     <section className="mx-auto flex flex-col items-center justify-center p-4 gap-4 mt-24 max-w-4xl opacity-0 animate-fadein [animation-delay:400ms]">
       <div>
         <h2 className="text-center font-bold text-2xl bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text text-transparent">
-          A Lightning-Address powered by eCash
+          A Lightning-Address powered by eCash and nostr
         </h2>
         <p className="text-center ">
-          Receive Lightning payments on your Cashu Address. Either sign up and
-          claim your username, or use any nostr public key (npub)
+          Receive Lightning payments on your npub.cash address. Either sign up
+          and claim your username, or use any nostr public key (npub) without
+          registration.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -22,7 +23,7 @@ function FeatureCards() {
         <FeatureCard
           icon={<FaKey />}
           title="Trust Minimized"
-          body="Balance is locked to your public key"
+          body="Balance can be locked to your public key"
         />
         <FeatureCard
           icon={<FaKey />}
@@ -32,7 +33,7 @@ function FeatureCards() {
         <FeatureCard
           icon={<FaCode />}
           title="Open Source"
-          body="Cashu-Address is FOSS and can be self-hosted"
+          body="Based on on FOSS Cashu-Adress"
         />
       </div>
     </section>

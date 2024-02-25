@@ -28,7 +28,7 @@ function ModalContent({
       setTimeout(() => {
         onCancel();
         navigate("/claim");
-      }, 4000);
+      }, 6000);
     }
   }, [paid, onCancel, navigate]);
   return (

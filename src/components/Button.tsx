@@ -1,6 +1,6 @@
 type ButtonProps = {
   text: string;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
 };
 
 function Button({ text, onClick }: ButtonProps) {
