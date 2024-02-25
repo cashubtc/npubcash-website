@@ -1,8 +1,8 @@
 import InfoBox from "./components/InfoBox";
 import Balance from "./components/Balance";
 import CoinButton from "../../components/CoinButton";
-import { FaBolt, FaCoins, FaDoorOpen } from "react-icons/fa6";
-import { useSearchParams } from "react-router-dom";
+import { FaBitcoinSign, FaBolt, FaCoins, FaDoorOpen } from "react-icons/fa6";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CashuClaimModal from "./components/CashuClaim";
 import LightningClaimModal from "./components/LightningClaimModal";
 import useInfo from "./hooks/useInfo";
@@ -16,6 +16,7 @@ function ClaimRoute() {
   const info = useInfo();
   const logout = useLogout();
   const profile = useProfile(info?.npub);
+  const navigate = useNavigate();
   return (
     <div className="w-full flex justify-center mt-12">
       <CardWrapper>
@@ -32,21 +33,33 @@ function ClaimRoute() {
           )}
         </div>
         <Balance />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <CoinButton
-            title="Claim on Lightning"
+            title="Lightning"
             icon={<FaBolt style={{ fill: "white" }} />}
             onClick={() => {
               setSearchParams("claim=ln");
             }}
           />
           <CoinButton
-            title="Claim on Cashu"
+            title="Cashu"
             icon={<FaCoins style={{ fill: "white" }} />}
             onClick={() => {
               setSearchParams("claim=cashu");
             }}
           />
+          <div className="col-span-2 flex justify-center">
+            <CoinButton
+              title="My Payment Page"
+              icon={<FaBitcoinSign style={{ fill: "white" }} />}
+              onClick={() => {
+                if (!info) {
+                  return;
+                }
+                navigate(`/pay/${info?.username || info?.npub}`);
+              }}
+            />
+          </div>
         </div>
         <InfoBox info={info} />
         {claimMode === "cashu" ? <CashuClaimModal /> : undefined}

@@ -5,6 +5,7 @@ import ModalWrapper from "../../../components/ModalWrapper";
 import { useLoaderData } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import QRCode from "react-qr-code";
+import { nip19 } from "nostr-tools";
 
 function PayModal({ onClose }: { onClose: () => void }) {
   const [invoice, setInvoice] = useState("");
@@ -19,7 +20,7 @@ function PayModal({ onClose }: { onClose: () => void }) {
     }
     const res = await fetch(
       `https://npub.cash/.well-known/lnurlp/${
-        data.username || data.pubkey
+        data.username || nip19.npubEncode(data.pubkey)
       }?amount=${Number(inputRef.current.value) * 1000}`,
     );
     const resData = await res.json();

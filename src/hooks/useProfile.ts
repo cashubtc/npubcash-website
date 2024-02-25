@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { pool } from "../main";
 import { nip19 } from "nostr-tools";
 
-export function useProfile(pubkey: string) {
+export function useProfile(pubkey: string | undefined) {
   const [profile, setProfile] = useState<{ picture?: string }>();
 
   useEffect(() => {

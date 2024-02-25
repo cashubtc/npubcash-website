@@ -11,7 +11,7 @@ import { nip19 } from "nostr-tools";
 
 function PayRoute() {
   const data = useLoaderData() as { pubkey: string; username?: string };
-  const [profile, setProfile] = useState<{ picture?: string }>();
+  const [profile, setProfile] = useState<{ picture?: string; name?: string }>();
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,6 +28,15 @@ function PayRoute() {
     }
     getProfile();
   }, []);
+
+  let username: string;
+  if (data.username) {
+    username = data.username;
+  } else if (profile && profile.name) {
+    username = profile.name;
+  } else {
+    username = nip19.npubEncode(data.pubkey).slice(0, 10);
+  }
 
   return (
     <div className="w-full flex justify-center mt-12">
@@ -46,21 +55,23 @@ function PayRoute() {
         </div>
         <div className="text-center mt-8">
           <h2 className="text-2xl font-bold bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text">
-            {data.username ? data.username : data.pubkey.slice(0, 10)}
+            {username}
           </h2>
         </div>
         <div className="p-4 rounded-xl bg-white">
           <QRCode size={160} value={`${data.pubkey}@npub.cash`} />
         </div>
         <div className="flex flex-col w-full gap-2">
-          <AddressButton
-            address={`${data.username}@npub.cash`}
-            onClick={() => {
-              window.navigator.clipboard.writeText(
-                `${data.username}@npub.cash`,
-              );
-            }}
-          />
+          {data.username ? (
+            <AddressButton
+              address={`${data.username}@npub.cash`}
+              onClick={() => {
+                window.navigator.clipboard.writeText(
+                  `${data.username}@npub.cash`,
+                );
+              }}
+            />
+          ) : undefined}
           <AddressButton
             address={`${nip19
               .npubEncode(data.pubkey)

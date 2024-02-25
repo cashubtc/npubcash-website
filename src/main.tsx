@@ -5,7 +5,7 @@ import HomeRoute from "./routes/home/HomeRoute";
 import RootRoute from "./routes/RootRoute";
 import ClaimRoute from "./routes/claim/ClaimRoute";
 import UsernameRoute from "./routes/username/UsernameRoute";
-import { SimplePool } from "nostr-tools";
+import { SimplePool, nip19 } from "nostr-tools";
 import { SdkProvider } from "./hooks/providers/SdkProvider";
 import SetupRoute from "./routes/setup/SetupRoute";
 import PayRoute from "./routes/pay/PayRoute";
@@ -72,6 +72,18 @@ const router = createBrowserRouter([
               username: params.username,
               pubkey: data.names[params.username],
             };
+          } else {
+            try {
+              const pubkey = nip19.decode(
+                params.username as `npub1${string}`,
+              ).data;
+              return {
+                username: null,
+                pubkey,
+              };
+            } catch {
+              throw new Response("Not Found", { status: 404 });
+            }
           }
         },
       },
