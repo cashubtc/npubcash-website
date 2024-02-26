@@ -9,7 +9,9 @@ import { motion } from "framer-motion";
 function LoginSelection({
   setMethod,
 }: {
-  setMethod: React.Dispatch<React.SetStateAction<"nsec" | "nip46" | undefined>>;
+  setMethod: React.Dispatch<
+    React.SetStateAction<"ncrypt" | "nip46" | undefined>
+  >;
 }) {
   const [modal, setModal] = useState(false);
   const { setSdk } = useContext(SdkContext);
@@ -48,6 +50,15 @@ function LoginSelection({
         >
           <FaShield />
           NIP-46
+        </button>
+        <button
+          className="flex items-center justify-center gap-2 font-bold bg-purple-600 px-2 py-1 rounded hover:bg-purple-700 active:bg-purple-700"
+          onClick={() => {
+            setMethod("ncrypt");
+          }}
+        >
+          <FaShield />
+          nsec / ncrypt
         </button>
       </div>
       <AlbyModal isOpen={modal} />

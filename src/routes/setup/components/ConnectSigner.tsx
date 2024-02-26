@@ -8,7 +8,9 @@ import { motion } from "framer-motion";
 function ConnectSigner({
   setMethod,
 }: {
-  setMethod: React.Dispatch<React.SetStateAction<"nsec" | "nip46" | undefined>>;
+  setMethod: React.Dispatch<
+    React.SetStateAction<"ncrypt" | "nip46" | undefined>
+  >;
 }) {
   const [signerConnecting, setSignerConnecting] = useState(false);
   const [error, setError] = useState<Error | null>();

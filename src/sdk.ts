@@ -1,13 +1,14 @@
 import { hexToBytes } from "@noble/hashes/utils";
 import { NCSDK, Nip07Signer, Nip46Signer } from "cashu-address-sdk";
 
-export async function setupSdk() {
-  const method = localStorage.getItem("sdk-method") as
-    | "nip07"
-    | "nip46"
-    | undefined;
+type SdkMethod = "nip07" | "nip46" | "ncrypt" | null;
+
+export async function setupSdk(): Promise<
+  { method: SdkMethod; sdk?: NCSDK } | undefined
+> {
+  const method = localStorage.getItem("sdk-method") as SdkMethod;
   if (method === "nip07") {
-    return new NCSDK("https://npub.cash", new Nip07Signer());
+    return { method, sdk: new NCSDK("https://npub.cash", new Nip07Signer()) };
   }
   if (method === "nip46") {
     const connectionConfig = localStorage.getItem("nip46-config");
@@ -24,6 +25,9 @@ export async function setupSdk() {
       hexToBytes(parsedConfig.clientSecret),
     );
     await signer.connect();
-    return new NCSDK("https://npub.cash", signer);
+    return { method, sdk: new NCSDK("https://npub.cash", signer) };
+  }
+  if (method === "ncrypt") {
+    return { method };
   }
 }

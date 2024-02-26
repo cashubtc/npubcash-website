@@ -1,23 +1,31 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
-import { setupSdk } from "../sdk";
 import { SdkContext } from "../hooks/providers/SdkProvider";
 import { AnimatePresence } from "framer-motion";
+import { setupSdk } from "../sdk";
 
 function RootRoute() {
   const [ready, setReady] = useState(false);
   const { setSdk } = useContext(SdkContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function setup() {
       const newSdk = await setupSdk();
-      setSdk(newSdk);
+      if (newSdk) {
+        if (newSdk.method === "ncrypt") {
+          console.log("triggered");
+          navigate("/setup?unlock");
+        }
+        setSdk(newSdk.sdk);
+        setReady(true);
+      }
       setReady(true);
     }
     setup();
-  }, [setSdk]);
+  }, []);
   if (!ready) {
     return <p>Loading...</p>;
   }
