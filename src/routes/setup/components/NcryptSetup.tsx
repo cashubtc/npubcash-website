@@ -2,10 +2,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useContext, useEffect, useRef, useState } from "react";
 import CardWrapper from "../../../components/CardWrapper";
 import * as nip49 from "nostr-tools/nip49";
-import { hexToBytes } from "@noble/hashes/utils";
 import { nip19 } from "nostr-tools";
 import { NCSDK, NsecSigner } from "cashu-address-sdk";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
+import { useNavigate } from "react-router-dom";
+import { hexToBytes } from "@noble/hashes/utils";
+
+const hexRegex = /^[0-9a-fA-F]{64}$/g;
 
 function NcryptSetup({
   setMethod,
@@ -16,47 +19,66 @@ function NcryptSetup({
 }) {
   const [skInput, setSkInput] = useState("");
   const [sk, setSk] = useState<Uint8Array>();
+  const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passRef2 = useRef<HTMLInputElement>(null);
   const { setSdk } = useContext(SdkContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    setIsValid(false);
     setError("");
-    setSk("");
+    setSk(undefined);
+    if (!skInput) {
+      return;
+    }
     const timer = setTimeout(() => {
-      if (skInput && !skInput.startsWith("nsec")) {
-        setError("Invalid private key. Expected nsec / ncrypt / hex");
-      } else {
+      if (skInput.startsWith("ncryptsec")) {
+        setIsValid(true);
+      } else if (skInput.startsWith("nsec")) {
         try {
           const bytes = nip19.decode(skInput as `nsec1${string}`).data;
           setSk(bytes);
+          setIsValid(true);
         } catch (e) {
           setError("Error while parsing");
         }
+      } else if (skInput.match(hexRegex)) {
+        const bytes = hexToBytes(skInput);
+        setSk(bytes);
+        setIsValid(true);
+      } else {
+        setError("Invalid private key. Expected nsec / ncrypt / hex");
       }
-    }, 1000);
+    }, 500);
     return () => {
       clearTimeout(timer);
     };
   }, [skInput]);
 
   async function loginHandler() {
-    setError("");
-    if (!passRef?.current || !passRef2.current) {
-      return;
+    if (sk) {
+      setError("");
+      if (!passRef?.current || !passRef2.current) {
+        return;
+      }
+      if (passRef.current.value !== passRef2.current.value) {
+        setError("Passphrases do not match");
+        return;
+      }
+      const encrypted = nip49.encrypt(sk!, passRef.current.value);
+      localStorage.setItem("sdk-method", "ncrypt");
+      localStorage.setItem("ncrypt-config", encrypted);
+      const sdk = new NCSDK("https://npub.cash", new NsecSigner(sk!));
+      navigate("/claim");
+      setSdk(sdk);
+    } else {
+      localStorage.setItem("sdk-method", "ncrypt");
+      localStorage.setItem("ncrypt-config", skInput);
+      navigate("/setup?unlock");
     }
-    if (passRef.current.value !== passRef2.current.value) {
-      setError("Passphrases do not match");
-      return;
-    }
-    const encrypted = nip49.encrypt(sk, passRef.current.value);
-    localStorage.setItem("sdk-method", "ncrypt");
-    localStorage.setItem("ncrypt-config", encrypted);
-    const sdk = new NCSDK("https://npub.cash", new NsecSigner(sk));
-    setSdk(sdk);
-    // navigate("/claim")
   }
 
   return (
@@ -73,10 +95,11 @@ function NcryptSetup({
               onChange={(e) => {
                 setSkInput(e.target.value);
               }}
+              placeholder="nsec / ncrypt / hex"
             />
           </div>
           <AnimatePresence>
-            {sk ? (
+            {sk && isValid ? (
               <motion.div
                 initial={{ opacity: 0, translateY: -50 }}
                 animate={{ opacity: 1, translateY: 0 }}
@@ -104,7 +127,8 @@ function NcryptSetup({
         <div className="flex flex-col gap-4">
           <button
             onClick={loginHandler}
-            className="px-2 py-1 bg-purple-600 from-purple-500 to-pink-500 rounded"
+            className="px-2 py-1 bg-purple-600 rounded disabled:bg-purple-400/50"
+            disabled={!isValid}
           >
             Login
           </button>
