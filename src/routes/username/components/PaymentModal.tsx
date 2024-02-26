@@ -1,9 +1,13 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import { createPortal } from "react-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import QRCode from "react-qr-code";
 import { useNavigate } from "react-router-dom";
+import ModalWrapper from "../../../components/ModalWrapper";
+import { useStopScroll } from "../../../hooks/useStopScroll";
+import Button from "../../../components/Button";
+import { SdkContext } from "../../../hooks/providers/SdkProvider";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -15,74 +19,125 @@ const confettiProps: ConfettiProps = {
 
 function ModalContent({
   invoice,
+  paymentToken,
+  username,
   onCancel,
-  paid,
 }: {
   invoice: string;
+  username: string;
+  paymentToken: string;
   onCancel: () => void;
-  paid: boolean;
 }) {
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [paid, setPaid] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (paid) {
-      setTimeout(() => {
-        onCancel();
-        navigate("/claim");
-      }, 6000);
+  const intervalRef = useRef<NodeJS.Timeout>();
+  const { sdk } = useContext(SdkContext);
+  useStopScroll();
+  console.log(paymentToken);
+
+  async function checkPayment() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
     }
-  }, [paid, onCancel, navigate]);
+    if (!sdk) {
+      return;
+    }
+    intervalRef.current = setInterval(async () => {
+      const payRes = await sdk.setUsername(username, paymentToken);
+      console.log(payRes);
+      if (!payRes.error) {
+        setPaid(true);
+        clearInterval(intervalRef.current);
+      }
+    }, 6000);
+  }
+
+  function cancelHandler() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    onCancel();
+  }
   return (
-    <>
-      <div className="inset-0 bg-black opacity-80 absolute" />
-      <div className="absolute inset-0 flex justify-center items-center">
-        <dialog
-          open
-          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800 gap-2"
-        >
-          {paid ? <ConfettiExplosion {...confettiProps} /> : undefined}
-          <div className="p-4 bg-white rounded relative">
-            {paid ? (
-              <div className="absolute inset-0 flex justify-center items-center z-2 bg-white/80">
-                <FaCheckCircle className="text-pink-500 text-9xl bg-white rounded-full" />
-              </div>
-            ) : undefined}
-            <QRCode
-              value={invoice}
-              onClick={() => {
-                navigator.clipboard.writeText(invoice);
-              }}
-            />
-            <p className="text-xs text-black text-center">
-              Click QR Code to copy
+    <ModalWrapper>
+      <div className="flex flex-col items-center justify-center w-full md:max-w-md gap-4 min-w-0">
+        <p className="text-sm text-zinc-400 text-center">
+          Pay this invoice to claim your username
+        </p>
+        {paid ? <ConfettiExplosion {...confettiProps} /> : undefined}
+        <div className="p-4 bg-white rounded relative">
+          {paid ? (
+            <div className="absolute inset-0 flex justify-center items-center z-2 bg-white/80">
+              <FaCheckCircle
+                className="text-9xl bg-white rounded-full"
+                style={{ fill: "url(#blue-gradient)" }}
+              />
+            </div>
+          ) : undefined}
+          <QRCode
+            value={invoice}
+            size={176}
+            onClick={() => {
+              navigator.clipboard.writeText(invoice);
+            }}
+          />
+        </div>
+        <div className="flex w-full justify-center">
+          {showInvoice ? (
+            <p className="flex w-full text-[8px] p-2 bg-zinc-900 text-zinc-400 break-all">
+              {invoice}
             </p>
+          ) : (
+            <button
+              className="text-sm text-purple-500"
+              onClick={() => {
+                setShowInvoice(true);
+              }}
+            >
+              Display Invoice
+            </button>
+          )}
+        </div>
+        {paid ? (
+          <Button
+            text="Continue"
+            onClick={() => {
+              navigate("/claim");
+            }}
+          />
+        ) : (
+          <div className="flex gap-2 ">
+            <Button text="Check Payment" onClick={checkPayment} />
+            <Button text="Cancel" onClick={cancelHandler} />
           </div>
-          <p className="text-sm">Pay this invoice to claim your username</p>
-          <button
-            className="px-2 py-1 bg-gradient-to-tr from-purple-500 to-pink-500 rounded"
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-        </dialog>
+        )}
       </div>
-    </>
+    </ModalWrapper>
   );
 }
 
 function PaymentModal({
   invoice,
-  paid,
+  paymentToken,
+  username,
   onCancel,
 }: {
   invoice?: string;
-  paid: boolean;
+  paymentToken?: string;
+  username?: string;
   onCancel: () => void;
 }) {
-  if (!invoice) {
+  if (!invoice || !paymentToken || !username) {
     return null;
   }
   return createPortal(
-    <ModalContent invoice={invoice} onCancel={onCancel} paid={paid} />,
+    <ModalContent
+      invoice={invoice}
+      onCancel={onCancel}
+      username={username}
+      paymentToken={paymentToken}
+    />,
     document.getElementById("modal")!,
   );
 }
