@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import { createPortal } from "react-dom";
 import { FaCheckCircle } from "react-icons/fa";

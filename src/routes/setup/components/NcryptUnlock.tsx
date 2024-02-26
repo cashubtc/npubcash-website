@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as nip49 from "nostr-tools/nip49";
 import { NCSDK, NsecSigner } from "cashu-address-sdk";
