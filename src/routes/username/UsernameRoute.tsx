@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function UsernameRoute() {
   const [username, setUsername] = useState("");
   const [invoice, setInvoice] = useState<string>();
-  const [paid, setPaid] = useState(false);
+  const [paymentToken, setPaymentToken] = useState("");
   const [error, setError] = useState<string>("");
   const { sdk } = useContext(SdkContext);
   const navigate = useNavigate();
@@ -39,23 +39,11 @@ function UsernameRoute() {
           }),
         );
         setInvoice(res.data.paymentRequest);
-        intervalRef.current = setInterval(async () => {
-          const payRes = await sdk.setUsername(username, res.data.paymentToken);
-          if (!payRes.error) {
-            setPaid(true);
-            clearInterval(intervalRef.current);
-          }
-        }, 6000);
+        setPaymentToken(res.data.paymentToken);
       } else {
         const { paymentToken, paymentRequest } = JSON.parse(storedPayment);
         setInvoice(paymentRequest);
-        intervalRef.current = setInterval(async () => {
-          const payRes = await sdk.setUsername(username, paymentToken);
-          if (!payRes.error) {
-            setPaid(true);
-            clearInterval(intervalRef.current);
-          }
-        }, 6000);
+        setPaymentToken(paymentToken);
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -95,13 +83,14 @@ function UsernameRoute() {
       </div>
       <PaymentModal
         invoice={invoice}
+        paymentToken={paymentToken}
+        username={username}
         onCancel={() => {
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
           }
           setInvoice("");
         }}
-        paid={paid}
       />
     </main>
   );
