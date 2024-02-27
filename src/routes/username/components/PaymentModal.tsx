@@ -34,7 +34,6 @@ function ModalContent({
   const intervalRef = useRef<NodeJS.Timeout>();
   const { sdk } = useContext(SdkContext);
   useStopScroll();
-  console.log(paymentToken);
 
   async function checkPayment() {
     if (intervalRef.current) {
@@ -45,7 +44,6 @@ function ModalContent({
     }
     intervalRef.current = setInterval(async () => {
       const payRes = await sdk.setUsername(username, paymentToken);
-      console.log(payRes);
       if (!payRes.error) {
         setPaid(true);
         clearInterval(intervalRef.current);
@@ -75,13 +73,15 @@ function ModalContent({
               />
             </div>
           ) : undefined}
-          <QRCode
-            value={invoice}
-            size={176}
-            onClick={() => {
-              navigator.clipboard.writeText(invoice);
-            }}
-          />
+          <a href={`lightning:${invoice}`}>
+            <QRCode
+              value={invoice}
+              size={176}
+              onClick={() => {
+                navigator.clipboard.writeText(invoice);
+              }}
+            />
+          </a>
         </div>
         <div className="flex w-full justify-center">
           {showInvoice ? (
