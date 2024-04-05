@@ -5,13 +5,33 @@ import ModalWrapper from "../../../components/ModalWrapper";
 import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
+import QRCode from "react-qr-code";
+import { UR, UREncoder } from "@gandlaf21/bc-ur";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
+  const [tokenPart, setTokenPart] = useState<string>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
   const { sdk } = useContext(SdkContext);
+
+  useEffect(() => {
+    // @ts-ignore
+    let interval: NodeJS.Timeout;
+    if (token) {
+      const ur = UR.from(token);
+      const maxFragmentLength = 100;
+      const firstSeqNum = 0;
+      const urEncoder = new UREncoder(ur, maxFragmentLength, firstSeqNum);
+      interval = setInterval(() => {
+        setTokenPart(urEncoder.nextPart());
+      }, 100);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [token]);
 
   useStopScroll();
 
@@ -59,31 +79,33 @@ function CashuClaim() {
   }
 
   return (
-    <>
-      <div className="inset-0 bg-black opacity-80 absolute" />
-      <div className="absolute inset-0 flex justify-center items-center">
-        <dialog
-          open
-          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800"
-        >
-          <div>
-            <div className="max-h-64 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-700 break-words overflow-auto rounded overflow-x-hidden">
-              <p>{token}</p>
-            </div>
-            <div className="flex gap-2 w-full justify-center my-4">
-              <Button text="Copy" onClick={copyHandler} />
-              <a
-                className="bg-purple-500 px-4 py-2 rounded"
-                href={`cashu:${token}`}
-              >
-                Claim in Wallet
-              </a>
-            </div>
+    <ModalWrapper>
+      <div className="flex flex-col gap-4 items-center">
+        <div className="p-2 rounded bg-white">
+          {tokenPart ? <QRCode value={tokenPart!} /> : undefined}
+        </div>
+        <div>
+          <div className="max-h-32 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
+            <p>{token}</p>
           </div>
-          <Button text="Close" onClick={() => setParams(undefined)} />
-        </dialog>
+          <div className="flex gap-2 w-full justify-center mt-2">
+            <Button text="Copy" onClick={copyHandler} />
+            <a
+              className="bg-purple-500 px-4 py-2 rounded"
+              href={`cashu:${token}`}
+            >
+              Claim in Wallet
+            </a>
+          </div>
+        </div>
+        <Button
+          text="Close"
+          onClick={() => {
+            setParams(undefined);
+          }}
+        />
       </div>
-    </>
+    </ModalWrapper>
   );
 }
 
