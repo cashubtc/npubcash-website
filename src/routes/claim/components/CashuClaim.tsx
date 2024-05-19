@@ -21,12 +21,12 @@ function CashuClaim() {
     let interval: NodeJS.Timeout;
     if (token) {
       const ur = UR.from(token);
-      const maxFragmentLength = 100;
+      const maxFragmentLength = 150;
       const firstSeqNum = 0;
       const urEncoder = new UREncoder(ur, maxFragmentLength, firstSeqNum);
       interval = setInterval(() => {
         setTokenPart(urEncoder.nextPart());
-      }, 100);
+      }, 200);
     }
     return () => {
       clearInterval(interval);
@@ -81,8 +81,14 @@ function CashuClaim() {
   return (
     <ModalWrapper>
       <div className="flex flex-col gap-4 items-center">
-        <div className="p-2 rounded bg-white">
-          {tokenPart ? <QRCode value={tokenPart!} /> : undefined}
+        <div
+          className={`${tokenPart ? "bg-white" : "bg-zinc-700"} p-2 rounded`}
+        >
+          {tokenPart ? (
+            <QRCode value={tokenPart!} />
+          ) : (
+            <QRCode value={"1"} bgColor="#27272a" fgColor="#3f3f46" />
+          )}
         </div>
         <div>
           <div className="max-h-32 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
