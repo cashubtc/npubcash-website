@@ -5,33 +5,14 @@ import ModalWrapper from "../../../components/ModalWrapper";
 import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
-import QRCode from "react-qr-code";
-import { UR, UREncoder } from "@gandlaf21/bc-ur";
+import QRCodeElement from "./QRCodeElement";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
-  const [tokenPart, setTokenPart] = useState<string>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
   const { sdk } = useContext(SdkContext);
-
-  useEffect(() => {
-    // @ts-ignore
-    let interval: NodeJS.Timeout;
-    if (token) {
-      const ur = UR.from(token);
-      const maxFragmentLength = 150;
-      const firstSeqNum = 0;
-      const urEncoder = new UREncoder(ur, maxFragmentLength, firstSeqNum);
-      interval = setInterval(() => {
-        setTokenPart(urEncoder.nextPart());
-      }, 200);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [token]);
 
   useStopScroll();
 
@@ -81,15 +62,7 @@ function CashuClaim() {
   return (
     <ModalWrapper>
       <div className="flex flex-col gap-4 items-center">
-        <div
-          className={`${tokenPart ? "bg-white" : "bg-zinc-700"} p-2 rounded`}
-        >
-          {tokenPart ? (
-            <QRCode value={tokenPart!} />
-          ) : (
-            <QRCode value={"1"} bgColor="#27272a" fgColor="#3f3f46" />
-          )}
-        </div>
+        <QRCodeElement value={token} />
         <div>
           <div className="max-h-32 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
             <p>{token}</p>
