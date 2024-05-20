@@ -8,23 +8,28 @@ type QRCodeElementProps = {
 
 function QRCodeElement({ value }: QRCodeElementProps) {
   const [tokenPart, setTokenPart] = useState("");
+  const [speed, setSpeed] = useState<"H" | "L">("H");
+  const [size, setSize] = useState<"S" | "L">("L");
 
   useEffect(() => {
     // @ts-ignore
     let interval: NodeJS.Timeout;
     if (value) {
       const ur = UR.from(value);
-      const maxFragmentLength = 150;
+      const maxFragmentLength = size === "L" ? 150 : 75;
       const firstSeqNum = 0;
       const urEncoder = new UREncoder(ur, maxFragmentLength, firstSeqNum);
-      interval = setInterval(() => {
-        setTokenPart(urEncoder.nextPart());
-      }, 100);
+      interval = setInterval(
+        () => {
+          setTokenPart(urEncoder.nextPart());
+        },
+        speed === "H" ? 100 : 250,
+      );
     }
     return () => {
       clearInterval(interval);
     };
-  }, [value]);
+  }, [value, size, speed]);
 
   if (!tokenPart) {
     return (
