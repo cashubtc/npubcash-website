@@ -6,6 +6,8 @@ import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
 import QRCodeElement from "./QRCodeElement";
+import CoinButton from "../../../components/CoinButton";
+import { FaCopy, FaCross } from "react-icons/fa6";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
@@ -69,17 +71,22 @@ function CashuClaim() {
           </p>
         </div>
         <div>
-          <div className="max-h-28 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
+          <div className="max-h-20 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
             <p>{token}</p>
           </div>
-          <div className="flex gap-2 w-full justify-center mt-2">
-            <Button text="Copy" onClick={copyHandler} />
-            <a
-              className="bg-purple-500 px-4 py-2 rounded"
-              href={`cashu:${token}`}
-            >
-              Claim in Wallet
-            </a>
+          <div className="flex gap-2 w-full justify-around mt-4 text-white">
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Copy"
+              onClick={copyHandler}
+            />
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Open In Wallet"
+              onClick={() => {
+                window.location.href = `cashu:${token}`;
+              }}
+            />
           </div>
         </div>
         <Button
