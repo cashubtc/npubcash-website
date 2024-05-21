@@ -5,6 +5,9 @@ import ModalWrapper from "../../../components/ModalWrapper";
 import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
+import QRCodeElement from "./QRCodeElement";
+import CoinButton from "../../../components/CoinButton";
+import { FaCopy } from "react-icons/fa6";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
@@ -59,31 +62,41 @@ function CashuClaim() {
   }
 
   return (
-    <>
-      <div className="inset-0 bg-black opacity-80 absolute" />
-      <div className="absolute inset-0 flex justify-center items-center">
-        <dialog
-          open
-          className="flex flex-col justify-center items-center p-4 rounded bg-zinc-800"
-        >
-          <div>
-            <div className="max-h-64 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-700 break-words overflow-auto rounded overflow-x-hidden">
-              <p>{token}</p>
-            </div>
-            <div className="flex gap-2 w-full justify-center my-4">
-              <Button text="Copy" onClick={copyHandler} />
-              <a
-                className="bg-purple-500 px-4 py-2 rounded"
-                href={`cashu:${token}`}
-              >
-                Claim in Wallet
-              </a>
-            </div>
+    <ModalWrapper>
+      <div className="flex flex-col gap-4 items-center">
+        <div>
+          <QRCodeElement value={token} />
+          <p className="text-center text-zinc-500 text-xs">
+            Long-press for QR options
+          </p>
+        </div>
+        <div>
+          <div className="max-h-20 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
+            <p>{token}</p>
           </div>
-          <Button text="Close" onClick={() => setParams(undefined)} />
-        </dialog>
+          <div className="flex gap-2 w-full justify-around mt-4 text-white">
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Copy"
+              onClick={copyHandler}
+            />
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Open In Wallet"
+              onClick={() => {
+                window.location.href = `cashu:${token}`;
+              }}
+            />
+          </div>
+        </div>
+        <Button
+          text="Close"
+          onClick={() => {
+            setParams(undefined);
+          }}
+        />
       </div>
-    </>
+    </ModalWrapper>
   );
 }
 
