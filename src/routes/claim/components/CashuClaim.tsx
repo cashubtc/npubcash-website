@@ -7,7 +7,7 @@ import { useStopScroll } from "../../../hooks/useStopScroll";
 import { SdkContext } from "../../../hooks/providers/SdkProvider";
 import QRCodeElement from "./QRCodeElement";
 import CoinButton from "../../../components/CoinButton";
-import { FaCopy, FaCross } from "react-icons/fa6";
+import { FaCopy } from "react-icons/fa6";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
