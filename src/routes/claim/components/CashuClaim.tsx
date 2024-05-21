@@ -62,9 +62,14 @@ function CashuClaim() {
   return (
     <ModalWrapper>
       <div className="flex flex-col gap-4 items-center">
-        <QRCodeElement value={token} />
         <div>
-          <div className="max-h-32 p-2 text-sm max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
+          <QRCodeElement value={token} />
+          <p className="text-center text-zinc-500 text-xs">
+            Long-press for QR options
+          </p>
+        </div>
+        <div>
+          <div className="max-h-28 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
             <p>{token}</p>
           </div>
           <div className="flex gap-2 w-full justify-center mt-2">
