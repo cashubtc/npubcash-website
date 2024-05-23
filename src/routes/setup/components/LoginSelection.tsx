@@ -33,7 +33,10 @@ function LoginSelection({
               setModal(true);
               return;
             }
-            const sdk = new NCSDK("https://npub.cash", new Nip07Signer());
+            const sdk = new NCSDK(
+              import.meta.env.VITE_SERVER_DOMAIN,
+              new Nip07Signer(),
+            );
             localStorage.setItem("sdk-method", "nip07");
             setSdk(sdk);
             navigate("/claim");

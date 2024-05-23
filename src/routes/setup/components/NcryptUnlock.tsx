@@ -40,7 +40,7 @@ function NcryptUnlock() {
                   inputRef.current!.value,
                 );
                 const sdk = new NCSDK(
-                  "https://npub.cash",
+                  import.meta.env.VITE_SERVER_DOMAIN,
                   new NsecSigner(decrypted),
                 );
                 setSdk(sdk);

@@ -8,11 +8,13 @@ export async function setupSdk(): Promise<
 > {
   const method = localStorage.getItem("sdk-method") as SdkMethod;
   if (method === "nip07") {
-    return { method, sdk: new NCSDK("https://npub.cash", new Nip07Signer()) };
+    return {
+      method,
+      sdk: new NCSDK(import.meta.env.VITE_SERVER_URL, new Nip07Signer()),
+    };
   }
   if (method === "nip46") {
     const connectionConfig = localStorage.getItem("nip46-config");
-    console.log("No config found...");
     if (!connectionConfig) {
       return undefined;
     }
@@ -25,7 +27,10 @@ export async function setupSdk(): Promise<
       hexToBytes(parsedConfig.clientSecret),
     );
     await signer.connect();
-    return { method, sdk: new NCSDK("https://npub.cash", signer) };
+    return {
+      method,
+      sdk: new NCSDK(import.meta.env.VITE_SERVER_URL, signer),
+    };
   }
   if (method === "ncrypt") {
     return { method };

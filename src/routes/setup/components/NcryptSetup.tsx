@@ -71,7 +71,10 @@ function NcryptSetup({
       const encrypted = nip49.encrypt(sk!, passRef.current.value);
       localStorage.setItem("sdk-method", "ncrypt");
       localStorage.setItem("ncrypt-config", encrypted);
-      const sdk = new NCSDK("https://npub.cash", new NsecSigner(sk!));
+      const sdk = new NCSDK(
+        import.meta.env.VITE_SERVER_URL,
+        new NsecSigner(sk!),
+      );
       navigate("/claim");
       setSdk(sdk);
     } else {

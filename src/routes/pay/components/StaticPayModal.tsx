@@ -19,7 +19,7 @@ function PayModal({ onClose }: { onClose: () => void }) {
       return;
     }
     const res = await fetch(
-      `https://npub.cash/.well-known/lnurlp/${
+      `${import.meta.env.VITE_SERVER_DOMAIN}/.well-known/lnurlp/${
         data.username || nip19.npubEncode(data.pubkey)
       }?amount=${Number(inputRef.current.value) * 1000}`,
     );

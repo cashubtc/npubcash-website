@@ -42,7 +42,7 @@ function ConnectSigner({
       setSignerConnecting(true);
       await signer.connect();
       setSignerConnecting(false);
-      const sdk = new NCSDK("https://npub.cash", signer);
+      const sdk = new NCSDK(import.meta.env.VITE_SERVER_DOMAIN, signer);
       setSdk(sdk);
       navigate("/claim");
     } catch (e) {
