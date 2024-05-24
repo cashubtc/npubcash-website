@@ -16,7 +16,7 @@ function UsernameInput({ username, setUsername }: UsernameInputProps) {
         id="username"
       />
       <p className="min-w-0 flex-shrink-0 ml-2 text-center text-xs">
-        {"@" + new URL(import.meta.env.VITE_SERVER_URL).host}
+        {"@" + new URL(import.meta.env.NPC_SERVER_URL).host}
       </p>
     </div>
   );

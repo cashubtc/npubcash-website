@@ -62,7 +62,7 @@ const router = createBrowserRouter([
           const isNpub = params.username?.startsWith("npub");
           if (!isNpub) {
             const res = await fetch(
-              `${import.meta.env.VITE_SERVER_DOMAIN}/.well-known/nostr.json?name=${params.username}`,
+              `${import.meta.env.NPC_SERVER_URL}/.well-known/nostr.json?name=${params.username}`,
             );
             const data = await res.json();
             if (Object.keys(data.names).length === 0) {

@@ -10,7 +10,7 @@ export async function setupSdk(): Promise<
   if (method === "nip07") {
     return {
       method,
-      sdk: new NCSDK(import.meta.env.VITE_SERVER_URL, new Nip07Signer()),
+      sdk: new NCSDK(import.meta.env.NPC_SERVER_URL, new Nip07Signer()),
     };
   }
   if (method === "nip46") {
@@ -29,7 +29,7 @@ export async function setupSdk(): Promise<
     await signer.connect();
     return {
       method,
-      sdk: new NCSDK(import.meta.env.VITE_SERVER_URL, signer),
+      sdk: new NCSDK(import.meta.env.NPC_SERVER_URL, signer),
     };
   }
   if (method === "ncrypt") {

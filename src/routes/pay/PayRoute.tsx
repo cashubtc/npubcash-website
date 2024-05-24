@@ -61,16 +61,16 @@ function PayRoute() {
         <div className="p-4 rounded-xl bg-white">
           <QRCode
             size={160}
-            value={`${data.pubkey}@${new URL(import.meta.env.VITE_SERVER_DOMAIN).host}`}
+            value={`${data.pubkey}@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
           />
         </div>
         <div className="flex flex-col w-full gap-2">
           {data.username ? (
             <AddressButton
-              address={`${data.username}@${new URL(import.meta.env.VITE_SERVER_DOMAIN).host}`}
+              address={`${data.username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
               onClick={() => {
                 window.navigator.clipboard.writeText(
-                  `${data.username}@${new URL(import.meta.env.VITE_SERVER_DOMAIN).host}`,
+                  `${data.username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`,
                 );
               }}
             />
@@ -81,10 +81,10 @@ function PayRoute() {
               .slice(
                 0,
                 10,
-              )}...@${new URL(import.meta.env.VITE_SERVER_DOMAIN).host}`}
+              )}...@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
             onClick={() => {
               window.navigator.clipboard.writeText(
-                `${nip19.npubEncode(data.pubkey)}@${new URL(import.meta.env.VITE_SERVER_DOMAIN).host}`,
+                `${nip19.npubEncode(data.pubkey)}@${new URL(import.meta.env.NPC_SERVER_URL).host}`,
               );
             }}
           />

@@ -25,10 +25,10 @@ function UsernameButton({ username }: UsernameButtonProps) {
   }
   return (
     <AddressButton
-      address={`${username}@${new URL(import.meta.env.VITE_SERVER_URL).host}`}
+      address={`${username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
       onClick={() => {
         window.navigator.clipboard.writeText(
-          `${username}@${new URL(import.meta.env.VITE_SERVER_URL).host}`,
+          `${username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`,
         );
       }}
     />

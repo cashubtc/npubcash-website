@@ -24,10 +24,10 @@ function InfoBox({ info }: InfoBoxProps) {
   return (
     <div className="flex w-full flex-col items-center gap-2">
       <AddressButton
-        address={`${info.npub.slice(0, 10)}...@${new URL(import.meta.env.VITE_SERVER_URL).host}`}
+        address={`${info.npub.slice(0, 10)}...@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
         onClick={() => {
           window.navigator.clipboard.writeText(
-            `${info.npub}@${new URL(import.meta.env.VITE_SERVER_URL).host}`,
+            `${info.npub}@${new URL(import.meta.env.NPC_SERVER_URL).host}`,
           );
         }}
       />
