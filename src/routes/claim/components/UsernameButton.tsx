@@ -25,9 +25,11 @@ function UsernameButton({ username }: UsernameButtonProps) {
   }
   return (
     <AddressButton
-      address={`${username}@npub.cash`}
+      address={`${username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
       onClick={() => {
-        window.navigator.clipboard.writeText(`${username}@npub.cash`);
+        window.navigator.clipboard.writeText(
+          `${username}@${new URL(import.meta.env.NPC_SERVER_URL).host}`,
+        );
       }}
     />
   );
