@@ -1,7 +1,13 @@
 import InfoBox from "./components/InfoBox";
 import Balance from "./components/Balance";
 import CoinButton from "../../components/CoinButton";
-import { FaBitcoinSign, FaBolt, FaCoins, FaDoorOpen } from "react-icons/fa6";
+import {
+  FaBitcoinSign,
+  FaBolt,
+  FaCoins,
+  FaDoorOpen,
+  FaMoneyBill,
+} from "react-icons/fa6";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CashuClaimModal from "./components/CashuClaim";
 import LightningClaimModal from "./components/LightningClaimModal";
@@ -48,18 +54,26 @@ function ClaimRoute() {
               setSearchParams("claim=cashu");
             }}
           />
-          <div className="col-span-2 flex justify-center">
-            <CoinButton
-              title="My Payment Page"
-              icon={<FaBitcoinSign style={{ fill: "white" }} />}
-              onClick={() => {
-                if (!info) {
-                  return;
-                }
-                navigate(`/pay/${info?.username || info?.npub}`);
-              }}
-            />
-          </div>
+          <CoinButton
+            title="Payment Page"
+            icon={<FaBitcoinSign style={{ fill: "white" }} />}
+            onClick={() => {
+              if (!info) {
+                return;
+              }
+              navigate(`/pay/${info?.username || info?.npub}`);
+            }}
+          />
+          <CoinButton
+            title="History"
+            icon={<FaMoneyBill style={{ fill: "white" }} />}
+            onClick={() => {
+              if (!info) {
+                return;
+              }
+              navigate("/history");
+            }}
+          />
         </div>
         <InfoBox info={info} />
         {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
