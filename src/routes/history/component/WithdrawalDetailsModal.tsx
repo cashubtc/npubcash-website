@@ -87,10 +87,6 @@ function WithdrawalDetails({ id }: { id: string }) {
           <div className="flex gap-2 w-full justify-around mt-4 text-white">
             <CoinButton
               icon={<FaCopy style={{ fill: "white" }} />}
-              title="Copy"
-            />
-            <CoinButton
-              icon={<FaCopy style={{ fill: "white" }} />}
               title="Open In Wallet"
               onClick={() => {
                 window.location.href = `cashu:${token}`;
