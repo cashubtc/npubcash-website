@@ -9,6 +9,7 @@ import { SimplePool, nip19 } from "nostr-tools";
 import { SdkProvider } from "./hooks/providers/SdkProvider";
 import SetupRoute from "./routes/setup/SetupRoute";
 import PayRoute from "./routes/pay/PayRoute";
+import HistoryRoute from "./routes/history/HistoryRoute";
 
 declare global {
   interface Window {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "claim",
         element: <ClaimRoute key={"claim"} />,
+      },
+      {
+        path: "history",
+        element: <HistoryRoute key={"history"} />,
       },
       {
         path: "username",

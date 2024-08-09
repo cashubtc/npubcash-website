@@ -8,9 +8,12 @@ import { SdkContext } from "../../../hooks/providers/SdkProvider";
 import QRCodeElement from "./QRCodeElement";
 import CoinButton from "../../../components/CoinButton";
 import { FaCopy } from "react-icons/fa6";
+import { getDecodedToken } from "@cashu/cashu-ts";
+import WarningBox from "../../../components/WarningBox";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
+  const [count, setCount] = useState<number>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
@@ -32,8 +35,11 @@ function CashuClaim() {
   useEffect(() => {
     if (sdk) {
       sdk
-        .getToken()
-        .then((data) => setToken(data))
+        .getTokenAndCount()
+        .then((data) => {
+          setToken(data.token);
+          setCount(data.count);
+        })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
     }
@@ -61,43 +67,53 @@ function CashuClaim() {
     );
   }
 
-  return (
-    <ModalWrapper>
-      <div className="flex flex-col gap-4 items-center">
-        <div>
-          <QRCodeElement value={token} />
-          <p className="text-center text-zinc-500 text-xs">
-            Long-press for QR options
-          </p>
-        </div>
-        <div>
-          <div className="max-h-20 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
-            <p>{token}</p>
-          </div>
-          <div className="flex gap-2 w-full justify-around mt-4 text-white">
-            <CoinButton
-              icon={<FaCopy style={{ fill: "white" }} />}
-              title="Copy"
-              onClick={copyHandler}
+  if (token && count) {
+    const decoded = getDecodedToken(token);
+    const proofs = decoded.token.map((t) => t.proofs).flat();
+    const amount = proofs.reduce((a, c) => a + c.amount, 0);
+    return (
+      <ModalWrapper>
+        <div className="flex flex-col gap-4 items-center">
+          {count > 100 ? (
+            <WarningBox
+              text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${count} proofs pending).`}
             />
-            <CoinButton
-              icon={<FaCopy style={{ fill: "white" }} />}
-              title="Open In Wallet"
-              onClick={() => {
-                window.location.href = `cashu:${token}`;
-              }}
-            />
+          ) : undefined}
+          <div>
+            <QRCodeElement value={token} />
+            <p className="text-center text-zinc-500 text-xs">
+              Long-press for QR options
+            </p>
           </div>
+          <div>
+            <div className="max-h-20 p-2 text-xs max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-white font-xs">
+              <p>{token}</p>
+            </div>
+            <div className="flex gap-2 w-full justify-around mt-4 text-white">
+              <CoinButton
+                icon={<FaCopy style={{ fill: "white" }} />}
+                title="Copy"
+                onClick={copyHandler}
+              />
+              <CoinButton
+                icon={<FaCopy style={{ fill: "white" }} />}
+                title="Open In Wallet"
+                onClick={() => {
+                  window.location.href = `cashu:${token}`;
+                }}
+              />
+            </div>
+          </div>
+          <Button
+            text="Close"
+            onClick={() => {
+              setParams(undefined);
+            }}
+          />
         </div>
-        <Button
-          text="Close"
-          onClick={() => {
-            setParams(undefined);
-          }}
-        />
-      </div>
-    </ModalWrapper>
-  );
+      </ModalWrapper>
+    );
+  }
 }
 
 function CashuClaimModal() {
