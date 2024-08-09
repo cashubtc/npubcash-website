@@ -13,7 +13,7 @@ import WarningBox from "../../../components/WarningBox";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();
-  const [count, setCount] = useState<number>();
+  const [totalPending, setTotalPending] = useState<number>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [, setParams] = useSearchParams();
@@ -38,7 +38,7 @@ function CashuClaim() {
         .getTokenAndCount()
         .then((data) => {
           setToken(data.token);
-          setCount(data.count);
+          setTotalPending(data.totalPending);
         })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
@@ -67,16 +67,16 @@ function CashuClaim() {
     );
   }
 
-  if (token && count) {
+  if (token && totalPending) {
     const decoded = getDecodedToken(token);
     const proofs = decoded.token.map((t) => t.proofs).flat();
     const amount = proofs.reduce((a, c) => a + c.amount, 0);
     return (
       <ModalWrapper>
         <div className="flex flex-col gap-4 items-center">
-          {count > 100 ? (
+          {totalPending > 100 ? (
             <WarningBox
-              text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${count} proofs pending).`}
+              text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${totalPending} proofs pending).`}
             />
           ) : undefined}
           <div>

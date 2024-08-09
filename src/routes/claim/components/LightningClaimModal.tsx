@@ -19,7 +19,7 @@ import WarningBox from "../../../components/WarningBox";
 
 function LightningClaim() {
   const [token, setToken] = useState<string>();
-  const [count, setCount] = useState<number>();
+  const [totalPending, setTotalPending] = useState<number>();
   const [error, setError] = useState<string>();
   const [lnError, setLnError] = useState<string>();
   const [lnLoading, setLnLoading] = useState(false);
@@ -41,7 +41,7 @@ function LightningClaim() {
         .getTokenAndCount()
         .then((data) => {
           setToken(data.token);
-          setCount(data.count);
+          setTotalPending(data.totalPending);
         })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
@@ -98,7 +98,7 @@ function LightningClaim() {
     );
   }
 
-  if (token && tokenAmount && lightningFees && count) {
+  if (token && tokenAmount && lightningFees && totalPending) {
     const decoded = getDecodedToken(token);
     const proofs = decoded.token.map((t) => t.proofs).flat();
     const amount = proofs.reduce((a, c) => a + c.amount, 0);
@@ -111,9 +111,9 @@ function LightningClaim() {
             className="flex flex-col justify-center items-center gap-4 max-w-xs sm:max-w-sm p-4 rounded bg-zinc-800"
           >
             <div className="flex flex-col items-center text-white text-center">
-              {count > 100 ? (
+              {totalPending > 100 ? (
                 <WarningBox
-                  text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${count} proofs pending).`}
+                  text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${totalPending} proofs pending).`}
                 />
               ) : undefined}
               <p>
