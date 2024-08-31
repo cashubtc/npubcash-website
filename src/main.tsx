@@ -57,41 +57,6 @@ const router = createBrowserRouter([
         element: <UsernameRoute key={"username"} />,
       },
       { path: "setup", element: <SetupRoute key={"setup"} /> },
-      {
-        path: "pay/:username",
-        element: <PayRoute />,
-        loader: async ({ params }) => {
-          if (!params.username) {
-            throw new Response("Not Found", { status: 404 });
-          }
-          const isNpub = params.username?.startsWith("npub");
-          if (!isNpub) {
-            const res = await fetch(
-              `${import.meta.env.NPC_SERVER_URL}/.well-known/nostr.json?name=${params.username}`,
-            );
-            const data = await res.json();
-            if (Object.keys(data.names).length === 0) {
-              throw new Response("Not Found", { status: 404 });
-            }
-            return {
-              username: params.username,
-              pubkey: data.names[params.username],
-            };
-          } else {
-            try {
-              const pubkey = nip19.decode(
-                params.username as `npub1${string}`,
-              ).data;
-              return {
-                username: null,
-                pubkey,
-              };
-            } catch {
-              throw new Response("Not Found", { status: 404 });
-            }
-          }
-        },
-      },
     ],
   },
 ]);

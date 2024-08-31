@@ -46,16 +46,6 @@ function ClaimRoute() {
             }}
           />
           <CoinButton
-            title="Payment Page"
-            icon={<FaBitcoinSign style={{ fill: "white" }} />}
-            onClick={() => {
-              if (!info) {
-                return;
-              }
-              navigate(`/pay/${info?.username || info?.npub}`);
-            }}
-          />
-          <CoinButton
             title="History"
             icon={<FaMoneyBill style={{ fill: "white" }} />}
             onClick={() => {
