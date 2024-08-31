@@ -3,14 +3,12 @@ import Balance from "./components/Balance";
 import CoinButton from "../../components/CoinButton";
 import {
   FaBitcoinSign,
-  FaBolt,
   FaCoins,
   FaDoorOpen,
   FaMoneyBill,
 } from "react-icons/fa6";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CashuClaimModal from "./components/CashuClaim";
-import LightningClaimModal from "./components/LightningClaimModal";
 import useInfo from "./hooks/useInfo";
 import useLogout from "../../hooks/useLogout";
 import CardWrapper from "../../components/CardWrapper";
@@ -41,13 +39,6 @@ function ClaimRoute() {
         <Balance />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <CoinButton
-            title="Lightning"
-            icon={<FaBolt style={{ fill: "white" }} />}
-            onClick={() => {
-              setSearchParams("claim=ln");
-            }}
-          />
-          <CoinButton
             title="Cashu"
             icon={<FaCoins style={{ fill: "white" }} />}
             onClick={() => {
@@ -77,7 +68,6 @@ function ClaimRoute() {
         </div>
         <InfoBox info={info} />
         {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
-        {claimMode === "ln" ? <LightningClaimModal /> : undefined}
         <CoinButton
           title="Logout"
           icon={<FaDoorOpen style={{ fill: "white" }} />}
