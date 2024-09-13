@@ -21,9 +21,12 @@ function Balance() {
     );
   }
   return (
-    <div className="rounded w-full mt-8 max-w-xl flex flex-col items-center">
-      <p className="bg-gradient-to-tr from-purple-500 to-pink-500 inline-block p-2 rounded text-transparent font-bold text-3xl bg-clip-text shadow-black">
-        {`${balance ? balance : 0} ${balance && balance > 1 ? "SATS" : "SAT"}`}
+    <div className="flex bg-zinc-800 p-2 py-4 rounded">
+      <p className="flex items-start gap-2 jutext text-zinc-50 text-white inline-block rounded font-bold text-5xl bg-clip-text shadow-black">
+        {`${balance ? balance : 0}`}
+        <span className="text-lg text-zinc-500">
+          {balance && balance > 1 ? "SATS" : "SAT"}
+        </span>
       </p>
     </div>
   );
