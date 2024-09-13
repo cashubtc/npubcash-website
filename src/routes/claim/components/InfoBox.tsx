@@ -12,17 +12,20 @@ type InfoBoxProps = {
 function InfoBox({ info }: InfoBoxProps) {
   if (!info) {
     return (
-      <div className="p-0.5 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full">
-        <div className="bg-zinc-900 px-2 py-1 rounded-full">
-          <p className="flex gap-1 items-center text-xs bg-gradient-to-tr from-purple-500 to-pink-500 text-transparent bg-clip-text active:text-purple-700">
-            Loading...
-          </p>
-        </div>
+      <div className="flex w-full flex-col gap-2 p-2 bg-zinc-800 rounded animate-pulse">
+        <p className="text-xs text-zinc-500">Your Lightning Addresses:</p>
+        <p className="flex gap-4 items-center justify-between text-sm text-zinc-400">
+          ...
+        </p>
+        <p className="flex gap-4 items-center justify-between text-sm text-zinc-400">
+          ...
+        </p>
       </div>
     );
   }
   return (
-    <div className="flex w-full flex-col items-center gap-2">
+    <div className="flex w-full flex-col gap-2 p-2 bg-zinc-800 rounded">
+      <p className="text-xs text-zinc-500">Your Lightning Addresses:</p>
       <AddressButton
         address={`${info.npub.slice(0, 10)}...@${new URL(import.meta.env.NPC_SERVER_URL).host}`}
         onClick={() => {
