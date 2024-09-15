@@ -15,7 +15,6 @@ export function useProfile(pubkey: string | undefined) {
         return;
       }
       const profileData = JSON.parse(profileEvent?.content);
-      console.log(profileData);
       setProfile(profileData);
     }
     if (pubkey) {

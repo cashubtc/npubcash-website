@@ -9,7 +9,6 @@ function HomeRoute() {
       <Hero />
       <FeatureCards />
       <Diagram />
-      {/* TODO: Footer Styling */}
       <Footer />
     </main>
   );

@@ -15,7 +15,6 @@ function RootRoute() {
       const newSdk = await setupSdk();
       if (newSdk) {
         if (newSdk.method === "ncrypt") {
-          console.log("triggered");
           navigate("/setup?unlock");
         }
         setSdk(newSdk.sdk);

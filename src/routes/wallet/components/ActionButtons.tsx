@@ -9,7 +9,6 @@ function ActionButtons() {
       <button
         onClick={() => {
           const autoConfirm = localStorage.getItem("npc_auto_confirm");
-          console.log(autoConfirm);
           if (autoConfirm) {
             navigate("/claim");
             return;
