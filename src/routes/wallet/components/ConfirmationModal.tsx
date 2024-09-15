@@ -2,13 +2,14 @@ import { useRef } from "react";
 import { createPortal } from "react-dom";
 import Button from "../../../components/Button";
 import ModalWrapper from "../../../components/ModalWrapper";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 
 function Confirmation() {
   const [, setParams] = useSearchParams();
 
   const checkRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   useStopScroll();
 
@@ -45,7 +46,7 @@ function Confirmation() {
               if (checkRef.current?.checked) {
                 localStorage.setItem("npc_auto_confirm", "true");
               }
-              setParams("claim=cashu");
+              navigate("/claim");
             }}
           />
           <button
