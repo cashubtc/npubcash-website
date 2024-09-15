@@ -2,7 +2,6 @@ import InfoBox from "./components/InfoBox.tsx";
 import Balance from "./components/Balance.tsx";
 import { FaDoorOpen } from "react-icons/fa6";
 import { useSearchParams } from "react-router-dom";
-import CashuClaimModal from "./components/CashuClaim.tsx";
 import useInfo from "./hooks/useInfo.ts";
 import useLogout from "../../hooks/useLogout.ts";
 import { useProfile } from "../../hooks/useProfile.ts";
@@ -12,7 +11,6 @@ import ConfirmationModal from "./components/ConfirmationModal.tsx";
 
 function WalletRoute() {
   const [searchParams] = useSearchParams();
-  const claimMode = searchParams.get("claim");
   const displayConfirmation = searchParams.get("confirm");
   const info = useInfo();
   const logout = useLogout();
@@ -44,7 +42,6 @@ function WalletRoute() {
         <InfoBox info={info} />
       </div>
       <ActionButtons />
-      {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
       {displayConfirmation ? <ConfirmationModal /> : undefined}
     </motion.main>
   );

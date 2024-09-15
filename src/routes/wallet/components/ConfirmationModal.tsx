@@ -1,15 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
 import Button from "../../../components/Button";
 import ModalWrapper from "../../../components/ModalWrapper";
 import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
-import { SdkContext } from "../../../hooks/providers/SdkProvider";
-import QRCodeElement from "./QRCodeElement";
-import CoinButton from "../../../components/CoinButton";
-import { FaCopy } from "react-icons/fa6";
-import { getDecodedToken } from "@cashu/cashu-ts";
-import WarningBox from "../../../components/WarningBox";
 
 function Confirmation() {
   const [, setParams] = useSearchParams();
@@ -22,13 +16,25 @@ function Confirmation() {
     <ModalWrapper>
       <div className="max-w-screen-sm flex flex-col items-center gap-8 text-white text-center">
         <p className="text-xl font-bold">Create Token?</p>
-        <p className="text-justify text-zinc-400">
-          Please confirm your withdrawal. In order to optimise mint operations
-          npub.cash will mark your proofs as spent once the token is displayed.
-          You can always display it again in the History Tab{" "}
-        </p>
+        <div className="flex flex-col gap-4 items-center">
+          <p className="text-center text-zinc-400">
+            In order to optimize mint operations npub.cash will mark your proofs
+            as spent once the token is displayed. You can always display it
+            again in the History Tab
+          </p>
+          <p className="text-center text-zinc-400">
+            You need a{" "}
+            <a
+              className="text-purple-600 hover:text-purple-400"
+              href="https://docs.cashu.space/wallets"
+            >
+              Cashu Wallet
+            </a>{" "}
+            to receive the generated token
+          </p>
+        </div>
 
-        <div className="flex gap-2 text-xs">
+        <div className="flex gap-2 ">
           <label htmlFor="check">Don't show this again</label>
           <input type="checkbox" id="check" ref={checkRef} />
         </div>

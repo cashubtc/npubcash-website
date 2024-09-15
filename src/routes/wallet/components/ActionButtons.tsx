@@ -2,7 +2,7 @@ import { FaList, FaMoneyBill } from "react-icons/fa6";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 function ActionButtons() {
-  const [serachParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   return (
     <div className="grid grid-cols-2 md:grid-cols-2 gap-2 w-full mb-4 max-w-screen-md">
@@ -11,7 +11,7 @@ function ActionButtons() {
           const autoConfirm = localStorage.getItem("npc_auto_confirm");
           console.log(autoConfirm);
           if (autoConfirm) {
-            setSearchParams("claim=cashu");
+            navigate("/claim");
             return;
           }
           setSearchParams("confirm=true");
