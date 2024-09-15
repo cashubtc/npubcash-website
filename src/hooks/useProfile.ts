@@ -3,7 +3,7 @@ import { pool } from "../main";
 import { nip19 } from "nostr-tools";
 
 export function useProfile(pubkey: string | undefined) {
-  const [profile, setProfile] = useState<{ picture?: string }>();
+  const [profile, setProfile] = useState<{ picture?: string; name?: string }>();
 
   useEffect(() => {
     async function getProfile(pk: string) {
@@ -15,7 +15,6 @@ export function useProfile(pubkey: string | undefined) {
         return;
       }
       const profileData = JSON.parse(profileEvent?.content);
-      console.log(profileData);
       setProfile(profileData);
     }
     if (pubkey) {

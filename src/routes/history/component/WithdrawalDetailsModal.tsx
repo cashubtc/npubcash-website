@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { useStopScroll } from "../../../hooks/useStopScroll";
 import ModalWrapper from "../../../components/ModalWrapper";
 import Button from "../../../components/Button";
-import QRCodeElement from "../../claim/components/QRCodeElement";
+import QRCodeElement from "../../wallet/components/QRCodeElement";
 import CoinButton from "../../../components/CoinButton";
 import { FaCopy } from "react-icons/fa6";
 import { createPortal } from "react-dom";

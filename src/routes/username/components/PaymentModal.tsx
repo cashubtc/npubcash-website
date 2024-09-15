@@ -103,7 +103,7 @@ function ModalContent({
           <Button
             text="Continue"
             onClick={() => {
-              navigate("/claim");
+              navigate("/wallet");
             }}
           />
         ) : (

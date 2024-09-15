@@ -21,7 +21,7 @@ function Hero() {
       </div>
       <div className="flex gap-4">
         <NavLink
-          to={{ pathname: "/claim" }}
+          to={{ pathname: "/wallet" }}
           className="px-2 py-1 bg-gradient-to-tr from-purple-500 to-pink-500 rounded hover:from-purple-700 hover:to-pink-700 transition"
         >
           Try it!

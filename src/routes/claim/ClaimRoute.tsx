@@ -1,93 +1,117 @@
-import InfoBox from "./components/InfoBox";
-import Balance from "./components/Balance";
-import CoinButton from "../../components/CoinButton";
-import {
-  FaBitcoinSign,
-  FaBolt,
-  FaCoins,
-  FaDoorOpen,
-  FaMoneyBill,
-} from "react-icons/fa6";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import CashuClaimModal from "./components/CashuClaim";
-import LightningClaimModal from "./components/LightningClaimModal";
-import useInfo from "./hooks/useInfo";
-import useLogout from "../../hooks/useLogout";
-import CardWrapper from "../../components/CardWrapper";
-import { useProfile } from "../../hooks/useProfile";
+import { SdkContext } from "../../hooks/providers/SdkProvider";
+import Button from "../../components/Button";
+import WarningBox from "../../components/WarningBox";
+import { getDecodedToken } from "@cashu/cashu-ts";
+import QRCodeElement from "../wallet/components/QRCodeElement";
+import CoinButton from "../../components/CoinButton";
+import { FaCopy } from "react-icons/fa6";
 
 function ClaimRoute() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const claimMode = searchParams.get("claim");
-  const info = useInfo();
-  const logout = useLogout();
-  const profile = useProfile(info?.npub);
+  const [token, setToken] = useState<string>();
+  const decodedToken = useMemo(() => {
+    if (token) {
+      return getDecodedToken(token);
+    }
+  }, [token]);
+  const [totalPending, setTotalPending] = useState<number>();
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(true);
+  const [, setParams] = useSearchParams();
+  const { sdk } = useContext(SdkContext);
   const navigate = useNavigate();
-  return (
-    <div className="w-full flex justify-center mt-12">
-      <CardWrapper>
-        <div className="bg-gradient-to-tr from-purple-500 to-pink-500 shadow absolute top-[-48px] rounded-full p-0.5">
-          {profile ? (
-            <img
-              src={profile.picture}
-              className="h-24 w-24 rounded-full bg-zinc-800"
-            />
-          ) : (
-            <div className="bg-zinc-800 w-24 h-24 rounded-full">
-              <div className="bg-zinc-600 h-24 w-24 rounded-full animate-pulse" />
-            </div>
-          )}
-        </div>
-        <Balance />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CoinButton
-            title="Lightning"
-            icon={<FaBolt style={{ fill: "white" }} />}
-            onClick={() => {
-              setSearchParams("claim=ln");
-            }}
-          />
-          <CoinButton
-            title="Cashu"
-            icon={<FaCoins style={{ fill: "white" }} />}
-            onClick={() => {
-              setSearchParams("claim=cashu");
-            }}
-          />
-          <CoinButton
-            title="Payment Page"
-            icon={<FaBitcoinSign style={{ fill: "white" }} />}
-            onClick={() => {
-              if (!info) {
-                return;
-              }
-              navigate(`/pay/${info?.username || info?.npub}`);
-            }}
-          />
-          <CoinButton
-            title="History"
-            icon={<FaMoneyBill style={{ fill: "white" }} />}
-            onClick={() => {
-              if (!info) {
-                return;
-              }
-              navigate("/history");
-            }}
-          />
-        </div>
-        <InfoBox info={info} />
-        {claimMode === "cashu" ? <CashuClaimModal /> : undefined}
-        {claimMode === "ln" ? <LightningClaimModal /> : undefined}
-        <CoinButton
-          title="Logout"
-          icon={<FaDoorOpen style={{ fill: "white" }} />}
+
+  async function copyHandler() {
+    if (!token) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(token);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if (sdk) {
+      sdk
+        .getTokenAndCount()
+        .then((data) => {
+          setToken(data.token);
+          setTotalPending(data.totalPending);
+        })
+        .catch((err) => setError(err.message))
+        .finally(() => setLoading(false));
+    }
+  }, [sdk]);
+
+  if (loading) {
+    return (
+      <div className="size-full flex flex-col gap-2 justify-center items-center">
+        <p className="text-white animate-pulse">Loading Token...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="size-full flex flex-col gap-2 justify-center items-center">
+        <p className="text-white">{error}</p>
+        <Button
+          text="Back"
           onClick={() => {
-            logout();
+            navigate("/wallet");
           }}
         />
-      </CardWrapper>
-    </div>
-  );
+      </div>
+    );
+  }
+
+  if (token && decodedToken && totalPending) {
+    const proofs = decodedToken.token.map((t) => t.proofs).flat();
+    const amount = proofs.reduce((a, c) => a + c.amount, 0);
+    return (
+      <div className="size-full flex flex-col gap-4 justify-center items-center">
+        {totalPending > 100 ? (
+          <WarningBox
+            text={`Attention: Too many proofs to claim at once. Claiming ${amount} SATS (100 of ${totalPending} proofs pending).`}
+          />
+        ) : undefined}
+        <div>
+          <QRCodeElement value={token} />
+          <p className="text-center text-zinc-500 text-xs">
+            Long-press for QR options
+          </p>
+        </div>
+        <div>
+          <div className="max-h-20 p-2 text-[8px] max-w-xs lg:max-w-lg bg-zinc-900 break-words overflow-auto rounded overflow-x-hidden text-zinc-500">
+            <p>{token}</p>
+          </div>
+          <div className="flex gap-2 w-full justify-around mt-4 text-white">
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Copy"
+              onClick={copyHandler}
+            />
+            <CoinButton
+              icon={<FaCopy style={{ fill: "white" }} />}
+              title="Open In Wallet"
+              onClick={() => {
+                window.location.href = `cashu:${token}`;
+              }}
+            />
+          </div>
+        </div>
+        <Button
+          text="Close"
+          onClick={() => {
+            setParams(undefined);
+          }}
+        />
+      </div>
+    );
+  }
 }
 
 export default ClaimRoute;

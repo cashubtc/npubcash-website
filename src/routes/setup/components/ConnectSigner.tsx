@@ -44,7 +44,7 @@ function ConnectSigner({
       setSignerConnecting(false);
       const sdk = new NCSDK(import.meta.env.NPC_SERVER_URL, signer);
       setSdk(sdk);
-      navigate("/claim");
+      navigate("/wallet");
     } catch (e) {
       if (e instanceof Error) {
         setError(e);
