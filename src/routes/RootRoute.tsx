@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
 import { SdkContext } from "../hooks/providers/SdkProvider";
 import { AnimatePresence } from "framer-motion";
