@@ -1,6 +1,7 @@
 import Hero from "./components/Hero";
 import FeatureCards from "./components/FeatureCards";
 import Diagram from "./components/Diagram";
+import Footer from "../../components/Footer";
 
 function HomeRoute() {
   return (
@@ -8,6 +9,8 @@ function HomeRoute() {
       <Hero />
       <FeatureCards />
       <Diagram />
+      {/* TODO: Footer Styling */}
+      <Footer />
     </main>
   );
 }
