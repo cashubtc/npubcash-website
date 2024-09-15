@@ -75,7 +75,7 @@ function NcryptSetup({
         import.meta.env.NPC_SERVER_URL,
         new NsecSigner(sk!),
       );
-      navigate("/claim");
+      navigate("/wallet");
       setSdk(sdk);
     } else {
       localStorage.setItem("sdk-method", "ncrypt");

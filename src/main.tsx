@@ -3,12 +3,11 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomeRoute from "./routes/home/HomeRoute";
 import RootRoute from "./routes/RootRoute";
-import ClaimRoute from "./routes/claim/ClaimRoute";
+import WalletRoute from "./routes/wallet/WalletRoute";
 import UsernameRoute from "./routes/username/UsernameRoute";
-import { SimplePool, nip19 } from "nostr-tools";
+import { SimplePool } from "nostr-tools";
 import { SdkProvider } from "./hooks/providers/SdkProvider";
 import SetupRoute from "./routes/setup/SetupRoute";
-import PayRoute from "./routes/pay/PayRoute";
 import HistoryRoute from "./routes/history/HistoryRoute";
 
 declare global {
@@ -45,8 +44,8 @@ const router = createBrowserRouter([
         element: <HomeRoute key={"home"} />,
       },
       {
-        path: "claim",
-        element: <ClaimRoute key={"claim"} />,
+        path: "wallet",
+        element: <WalletRoute key={"wallet"} />,
       },
       {
         path: "history",

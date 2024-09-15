@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import Button from "../../../components/Button";
-import ModalWrapper from "../../../components/ModalWrapper";
+import Button from "../../../components/Button.tsx";
+import ModalWrapper from "../../../components/ModalWrapper.tsx";
 import { useSearchParams } from "react-router-dom";
-import { useStopScroll } from "../../../hooks/useStopScroll";
-import { SdkContext } from "../../../hooks/providers/SdkProvider";
-import QRCodeElement from "./QRCodeElement";
-import CoinButton from "../../../components/CoinButton";
+import { useStopScroll } from "../../../hooks/useStopScroll.ts";
+import { SdkContext } from "../../../hooks/providers/SdkProvider.tsx";
+import QRCodeElement from "./QRCodeElement.tsx";
+import CoinButton from "../../../components/CoinButton.tsx";
 import { FaCopy } from "react-icons/fa6";
 import { getDecodedToken } from "@cashu/cashu-ts";
-import WarningBox from "../../../components/WarningBox";
+import WarningBox from "../../../components/WarningBox.tsx";
 
 function CashuClaim() {
   const [token, setToken] = useState<string>();

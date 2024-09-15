@@ -44,7 +44,7 @@ const Navbar = () => {
                       return "text-transparent bg-gradient-to-tr from-purple-500 to-pink-500 bg-clip-text";
                     }
                   }}
-                  to={{ pathname: sdk ? "/claim" : "setup" }}
+                  to={{ pathname: sdk ? "/wallet" : "setup" }}
                 >
                   Wallet
                 </NavLink>

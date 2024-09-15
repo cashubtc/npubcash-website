@@ -44,7 +44,7 @@ function NcryptUnlock() {
                   new NsecSigner(decrypted),
                 );
                 setSdk(sdk);
-                navigate("/claim");
+                navigate("/wallet");
               } catch {
                 throw new Error(
                   "Failed to decrypt. Did you enter the right passphrase?",

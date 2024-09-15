@@ -39,7 +39,7 @@ function LoginSelection({
             );
             localStorage.setItem("sdk-method", "nip07");
             setSdk(sdk);
-            navigate("/claim");
+            navigate("/wallet");
           }}
         >
           <FaSignature />

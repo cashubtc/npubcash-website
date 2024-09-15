@@ -14,7 +14,7 @@ function HistoryRoute() {
         <WithdrawalList />
         <Button
           onClick={() => {
-            navigate("/claim");
+            navigate("/wallet");
           }}
           text="Back"
         />
